@@ -19,14 +19,11 @@
             --theme-gradient-to: #f97316; /* orange-500 */
             --theme-shadow-color: rgba(239, 68, 68, 0.5); /* red-500 shadow */
             --theme-focus-ring-color: #ef4444; /* red-500 */
-            --theme-bg-from: #fca5a5; /* red-300 */
-            --theme-bg-to: #fdba74; /* orange-300 */
         }
         body {
             font-family: 'Lexend', sans-serif;
-            background: linear-gradient(135deg, var(--theme-bg-from, #fca5a5), var(--theme-bg-to, #fdba74));
+            background: linear-gradient(135deg, #fca5a5 0%, #fdba74 100%); /* Red-300 to Orange-300 */
             color: #2d3748;
-            transition: background 0.5s ease;
         }
         .glass-container {
             background: rgba(255, 255, 255, 0.6);
@@ -38,7 +35,7 @@
         .theme-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             color: white;
-            border-radius: 1rem;
+            border-radius: 1rem; /* rounded-xl */
         }
         .theme-card:hover {
             transform: translateY(-8px);
@@ -124,7 +121,7 @@
         </div>
         
         <div id="game-over-view" class="hidden fade-in text-center p-8">
-            <h2 id="game-over-title" class="text-3xl font-bold text-theme mb-4">¡Partida Terminada!</h2>
+            <h2 id="game-over-title" class="text-3xl font-bold text-red-600 mb-4">¡Partida Terminada!</h2>
             <p id="final-score-text" class="text-xl text-gray-700 mb-8"></p>
             <button id="play-again-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Jugar de Nuevo</button>
         </div>
@@ -148,75 +145,20 @@
                 densidad: { name: 'Densidad', units: { 'kg/m³': { num: 'kg', den: 'm³' }, 'g/cm³': { num: 'g', den: 'cm³' } } }
             },
             prefix: {
-                name: 'Múltiplos y Submúltiplos', base_units: ['m', 'g', 's', 'L', 'W', 'V', 'A', 'Hz', 'J'],
-                prefixes: { 'G': 1e9, 'M': 1e6, 'k': 1e3, '': 1, 'c': 1e-2, 'm': 1e-3, 'µ': 1e-6, 'n': 1e-9 }
+                name: 'Múltiplos y Submúltiplos',
+                base_units: ['m', 'g', 's', 'L', 'W', 'V', 'A', 'Hz', 'J'],
+                path: ['G', 'M', 'k', '', 'c', 'm', 'µ', 'n'],
+                units: {
+                    'G': { to_next: 1000 }, 'M': { to_next: 1000 }, 'k': { to_next: 1000 },
+                    '': { to_next: 100 }, 'c': { to_next: 10 }, 'm': { to_next: 1000 },
+                    'µ': { to_next: 1000 }, 'n': {}
+                }
             }
         };
         const simpleUnitToMagnitude = {};
         for (const magKey in data.simple) {
             data.simple[magKey].path.forEach(unitKey => simpleUnitToMagnitude[unitKey] = magKey);
         }
-
-        const themes = {
-            default: {
-                '--theme-color-600': '#dc2626',
-                '--theme-color-800': '#991b1b',
-                '--theme-gradient-from': '#ef4444',
-                '--theme-gradient-to': '#f97316',
-                '--theme-shadow-color': 'rgba(239, 68, 68, 0.5)',
-                '--theme-focus-ring-color': '#ef4444',
-                '--theme-bg-from': '#fca5a5',
-                '--theme-bg-to': '#fdba74'
-            },
-            simple: {
-                '--theme-color-600': '#0284c7', // sky-600
-                '--theme-color-800': '#0369a1', // sky-800
-                '--theme-gradient-from': '#0ea5e9', // sky-500
-                '--theme-gradient-to': '#06b6d4', // cyan-500
-                '--theme-shadow-color': 'rgba(14, 165, 233, 0.5)',
-                '--theme-focus-ring-color': '#0ea5e9',
-                '--theme-bg-from': '#bae6fd',
-                '--theme-bg-to': '#a5f3fc'
-            },
-            derived: {
-                '--theme-color-600': '#7c3aed', // purple-600
-                '--theme-color-800': '#5b21b6', // purple-800
-                '--theme-gradient-from': '#8b5cf6', // purple-500
-                '--theme-gradient-to': '#6366f1', // indigo-500
-                '--theme-shadow-color': 'rgba(139, 92, 246, 0.5)',
-                '--theme-focus-ring-color': '#8b5cf6',
-                '--theme-bg-from': '#e9d5ff',
-                '--theme-bg-to': '#c7d2fe'
-            },
-            prefix: {
-                '--theme-color-600': '#16a34a', // green-600
-                '--theme-color-800': '#14532d', // green-900
-                '--theme-gradient-from': '#22c55e', // green-500
-                '--theme-gradient-to': '#84cc16', // lime-500
-                '--theme-shadow-color': 'rgba(34, 197, 94, 0.5)',
-                '--theme-focus-ring-color': '#22c55e',
-                '--theme-bg-from': '#a7f3d0',
-                '--theme-bg-to': '#d9f99d'
-            },
-            scientific: {
-                '--theme-color-600': '#f97316', // orange-500
-                '--theme-color-800': '#c2410c', // orange-700
-                '--theme-gradient-from': '#f59e0b', // amber-500
-                '--theme-gradient-to': '#f97316', // orange-500
-                '--theme-shadow-color': 'rgba(245, 158, 11, 0.5)',
-                '--theme-focus-ring-color': '#f59e0b',
-                '--theme-bg-from': '#fde68a',
-                '--theme-bg-to': '#fed7aa'
-            }
-        };
-
-        const applyThemeColors = (theme = 'default') => {
-            const colors = themes[theme];
-            const root = document.documentElement;
-            for (const [key, value] of Object.entries(colors)) {
-                root.style.setProperty(key, value);
-            }
-        };
 
         // --- DOM ELEMENTS ---
         const mainMenu = document.getElementById('main-menu');
@@ -229,6 +171,11 @@
         let gameState = {};
         let currentTheme = '';
 
+        const parseFloatWithComma = (str) => {
+            if (typeof str !== 'string') return parseFloat(str);
+            return parseFloat(str.replace(',', '.'));
+        };
+
         const showView = (viewToShow) => {
             allViews.forEach(v => v.classList.add('hidden'));
             viewToShow.classList.remove('hidden');
@@ -240,16 +187,7 @@
             const stats = getStats();
             const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
             const statsContainer = document.getElementById('stats-container');
-            statsContainer.innerHTML = `
-                <div class="flex items-center justify-center gap-4">
-                    <div>
-                        <h3 class="font-bold text-gray-800">Estadísticas Globales</h3>
-                        <p class="text-sm text-gray-700">Aciertos: <span class="font-semibold text-green-600">${stats.correct}</span> de <span class="font-semibold text-blue-600">${stats.total}</span> | Precisión: <span class="font-semibold text-yellow-600">${accuracy}%</span></p>
-                    </div>
-                    <button id="reset-stats-btn" class="p-2 rounded-full hover:bg-red-500/10" title="Borrar datos">
-                        <svg class="w-5 h-5 text-gray-500 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
-                </div>`;
+            statsContainer.innerHTML = `<div class="flex items-center justify-center gap-4"><div><h3 class="font-bold text-gray-800">Estadísticas Globales</h3><p class="text-sm text-gray-700">Aciertos: <span class="font-semibold text-green-600">${stats.correct}</span> de <span class="font-semibold text-blue-600">${stats.total}</span> | Precisión: <span class="font-semibold text-yellow-600">${accuracy}%</span></p></div><button id="reset-stats-btn" class="p-2 rounded-full hover:bg-red-500/10" title="Borrar datos"><svg class="w-5 h-5 text-gray-500 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div>`;
             document.getElementById('reset-stats-btn').addEventListener('click', () => {
                 if (confirm('¿Estás seguro de que quieres borrar todas tus estadísticas?')) {
                     localStorage.removeItem('conversionStats');
@@ -262,22 +200,8 @@
             const themeBtn = e.target.closest('button[data-theme]');
             if (!themeBtn) return;
             currentTheme = themeBtn.dataset.theme;
-            applyThemeColors(currentTheme);
-            questionSelectionView.innerHTML = `
-                <h2 class="text-2xl font-bold text-theme mb-6">¿Cuántas preguntas?</h2>
-                <div class="flex justify-center flex-wrap gap-4 mt-6">
-                    <button data-count="10" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">10</button>
-                    <button data-count="15" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">15</button>
-                    <button data-count="20" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">20</button>
-                </div>
-                <button id="back-to-themes-btn" class="text-theme hover:text-theme-dark mt-8 flex items-center gap-1.5 mx-auto">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                    Volver
-                </button>`;
-            document.getElementById('back-to-themes-btn').addEventListener('click', () => {
-                applyThemeColors(); // Reset to default
-                showView(mainMenu);
-            });
+            questionSelectionView.innerHTML = `<h2 class="text-2xl font-bold text-red-600 mb-6">¿Cuántas preguntas?</h2><div class="flex justify-center flex-wrap gap-4 mt-6"><button data-count="10" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">10</button><button data-count="15" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">15</button><button data-count="20" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">20</button></div><button id="back-to-themes-btn" class="text-red-600 hover:text-red-800 mt-8 flex items-center gap-1.5 mx-auto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Volver</button>`;
+            document.getElementById('back-to-themes-btn').addEventListener('click', () => showView(mainMenu));
             showView(questionSelectionView);
         });
 
@@ -285,58 +209,27 @@
             const countBtn = e.target.closest('button[data-count]');
             if (!countBtn) return;
             gameState = { current: 0, score: 0, total: parseInt(countBtn.dataset.count), problem: {} };
-            gameView.innerHTML = `
-                <div class="flex items-center justify-between mb-2 text-sm">
-                    <button id="back-btn" class="text-theme hover:text-theme-dark flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                        Salir
-                    </button>
-                     <div id="score-display" class="font-semibold text-gray-700"></div>
-                </div>
-                <div id="progress-container" class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                    <div id="progress-bar" class="bg-yellow-400 h-2 rounded-full transition-all duration-300 ease-linear"></div>
-                </div>
-                <div class="bg-white/50 p-5 rounded-lg text-center border border-gray-200">
-                    <p class="text-gray-600 mb-2" id="problem-title"></p>
-                    <p id="problem-statement" class="text-xl md:text-2xl font-bold text-theme tracking-wider break-all"></p>
-                </div>
-                <div class="mt-5">
-                    <p class="text-center text-gray-600 mb-4" id="equation-title"></p>
-                    <div id="equation-container" class="overflow-x-auto pb-4">
-                        <div class="flex items-center justify-center flex-wrap gap-2 md:gap-4 text-lg md:text-xl min-w-max px-2"></div>
-                    </div>
-                </div>
-                <div class="mt-6 flex justify-center">
-                    <button id="check-btn" class="btn-primary px-8 py-3 text-white font-semibold rounded-lg">Comprobar</button>
-                </div>
-                <div id="feedback-container" class="hidden mt-5 p-4 rounded-lg fade-in"></div>
-                <div class="text-center">
-                     <button id="next-btn" class="hidden mt-5 btn-primary px-8 py-3 text-white font-semibold rounded-lg">Siguiente Pregunta →</button>
-                </div>`;
-            document.getElementById('back-btn').addEventListener('click', () => {
-                applyThemeColors(); // Reset to default
-                showView(mainMenu);
-            });
+            gameView.innerHTML = `<div class="flex items-center justify-between mb-2 text-sm"><button id="back-btn" class="text-red-600 hover:text-red-800 flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Salir</button><div id="score-display" class="font-semibold text-gray-700"></div></div><div id="progress-container" class="w-full bg-gray-200 rounded-full h-2 mb-4"><div id="progress-bar" class="bg-yellow-400 h-2 rounded-full transition-all duration-300 ease-linear"></div></div><div class="bg-white/50 p-5 rounded-lg text-center border border-gray-200"><p class="text-gray-600 mb-2" id="problem-title"></p><p id="problem-statement" class="text-xl md:text-2xl font-bold text-red-600 tracking-wider break-all"></p></div><div class="mt-5"><p class="text-center text-gray-600 mb-4" id="equation-title"></p><div id="equation-container" class="overflow-x-auto pb-4"><div class="flex items-center justify-center flex-wrap gap-2 md:gap-4 text-lg md:text-xl min-w-max px-2"></div></div></div><div class="mt-6 flex justify-center"><button id="check-btn" class="btn-primary px-8 py-3 text-white font-semibold rounded-lg">Comprobar</button></div><div id="feedback-container" class="hidden mt-5 p-4 rounded-lg fade-in"></div><div class="text-center"><button id="next-btn" class="hidden mt-5 btn-primary px-8 py-3 text-white font-semibold rounded-lg">Siguiente Pregunta →</button></div>`;
+            document.getElementById('back-btn').addEventListener('click', () => showView(mainMenu));
             document.getElementById('check-btn').addEventListener('click', checkAnswer);
             document.getElementById('next-btn').addEventListener('click', generateProblem);
             showView(gameView);
             generateProblem();
         });
 
-        // --- PROBLEM GENERATION ---
         const generateProblem = () => {
-            gameView.querySelector('#feedback-container').classList.add('hidden');
-            gameView.querySelector('#check-btn').classList.remove('hidden');
-            gameView.querySelector('#next-btn').classList.add('hidden');
+            const feedbackContainer = gameView.querySelector('#feedback-container');
+            const checkBtn = gameView.querySelector('#check-btn');
+            const nextBtn = gameView.querySelector('#next-btn');
+            feedbackContainer.classList.add('hidden');
+            checkBtn.classList.remove('hidden');
+            nextBtn.classList.add('hidden');
             gameView.querySelector('#equation-container div').innerHTML = '';
-            
             const value = parseFloat((Math.random() * 200 + 1).toPrecision(3));
-
             if (currentTheme === 'simple') generateSimpleProblem(value);
             else if (currentTheme === 'derived') generateDerivedProblem(value);
             else if (currentTheme === 'prefix') generatePrefixProblem(value);
             else if (currentTheme === 'scientific') generateScientificProblem();
-
             updateProgress();
         };
 
@@ -347,12 +240,9 @@
              const fromIdx = mag.path.indexOf(fromUnit);
              const toIdx = mag.path.indexOf(toUnit);
              if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return { steps: [], factor: 1 };
-             
-             const steps = [];
-             let totalFactor = 1;
+             const steps = []; let totalFactor = 1;
              const forward = fromIdx < toIdx;
              const path = forward ? mag.path.slice(fromIdx, toIdx) : mag.path.slice(toIdx, fromIdx).reverse();
-             
              path.forEach(u => {
                  const stepFrom = forward ? u : mag.path[mag.path.indexOf(u) + 1];
                  const stepTo = forward ? mag.path[mag.path.indexOf(u) + 1] : u;
@@ -373,10 +263,8 @@
             const mag = data.simple[magKeys[Math.floor(Math.random() * magKeys.length)]];
             let from, to;
             do { from = mag.path[Math.floor(Math.random() * mag.path.length)]; to = mag.path[Math.floor(Math.random() * mag.path.length)]; } while (from === to);
-            
             const { steps, factor } = getConversionSteps(from, to);
             gameState.problem = { type: 'factor', value, from, to, steps, correctAnswer: value * factor };
-            
             buildFactorEquationUI();
         };
         
@@ -387,69 +275,71 @@
             const unitKeys = Object.keys(mag.units);
             let fromKey = unitKeys[0], toKey = unitKeys[1];
             if (Math.random() > 0.5) [fromKey, toKey] = [toKey, fromKey];
-            
             const from = mag.units[fromKey], to = mag.units[toKey];
             const numConv = getConversionSteps(from.num, to.num);
             const denConv = getConversionSteps(from.den, to.den);
-            const steps = [
-                ...numConv.steps, 
-                ...denConv.steps.map(s => ({...s, num: s.den, den: s.num, numUnit: s.denUnit, denUnit: s.numUnit}))
-            ];
+            const steps = [ ...numConv.steps, ...denConv.steps.map(s => ({...s, num: s.den, den: s.num, numUnit: s.denUnit, denUnit: s.numUnit})) ];
             const totalFactor = numConv.factor / denConv.factor;
-            
             gameState.problem = { type: 'factor', value, from: fromKey, to: toKey, steps, correctAnswer: value * totalFactor };
             buildFactorEquationUI();
         };
 
         const generatePrefixProblem = (value) => {
-            const prefixes = Object.keys(data.prefix.prefixes);
             const baseUnit = data.prefix.base_units[Math.floor(Math.random() * data.prefix.base_units.length)];
-            let fromP, toP;
-            do { fromP = prefixes[Math.floor(Math.random() * prefixes.length)]; toP = prefixes[Math.floor(Math.random() * prefixes.length)]; } while (fromP === toP);
-            
-            const fromFactor = data.prefix.prefixes[fromP];
-            const toFactor = data.prefix.prefixes[toP];
-            const fromUnit = fromP + baseUnit, toUnit = toP + baseUnit;
-            const factor = fromFactor / toFactor;
-            
-            gameState.problem = { type: 'factor', value, from: fromUnit, to: toUnit, steps: [{num: 1, den: factor, numUnit: toUnit, denUnit: fromUnit}], correctAnswer: value / factor };
+            const magnitude = data.prefix;
+            let fromIndex, toIndex;
+            const pathLength = magnitude.path.length;
+            fromIndex = Math.floor(Math.random() * pathLength);
+            if (Math.random() > 0.5) { // 50% chance for a complex problem
+                do { toIndex = Math.floor(Math.random() * pathLength); } while (fromIndex === toIndex);
+            } else { // 50% chance for a simpler problem (1 or 2 steps away)
+                const step = Math.random() > 0.5 ? 1 : 2;
+                const direction = Math.random() > 0.5 ? 1 : -1;
+                toIndex = fromIndex + (step * direction);
+                if (toIndex < 0 || toIndex >= pathLength) toIndex = fromIndex - (step * direction);
+                if (toIndex < 0 || toIndex >= pathLength || fromIndex === toIndex) toIndex = fromIndex > 0 ? fromIndex - 1 : fromIndex + 1;
+            }
+            const fromPrefix = magnitude.path[fromIndex];
+            const toPrefix = magnitude.path[toIndex];
+            const steps = []; let totalFactor = 1;
+            const forward = fromIndex < toIndex;
+            const pathSlice = forward ? magnitude.path.slice(fromIndex, toIndex) : magnitude.path.slice(toIndex, fromIndex).reverse();
+            pathSlice.forEach((prefixKey) => {
+                const stepFromPrefix = forward ? prefixKey : magnitude.path[magnitude.path.indexOf(prefixKey) + 1];
+                const stepToPrefix = forward ? magnitude.path[magnitude.path.indexOf(prefixKey) + 1] : prefixKey;
+                const factor = magnitude.units[stepFromPrefix].to_next;
+                const stepFromUnit = stepFromPrefix + baseUnit;
+                const stepToUnit = stepToPrefix + baseUnit;
+                if (forward) {
+                    steps.push({ num: factor, den: 1, numUnit: stepToUnit, denUnit: stepFromUnit });
+                    totalFactor *= factor;
+                } else {
+                    steps.push({ num: 1, den: factor, numUnit: stepToUnit, denUnit: stepFromUnit });
+                    totalFactor /= factor;
+                }
+            });
+            const fromUnit = fromPrefix + baseUnit;
+            const toUnit = toPrefix + baseUnit;
+            gameState.problem = { type: 'factor', value, from: fromUnit, to: toUnit, steps, correctAnswer: value * totalFactor };
             buildFactorEquationUI();
         };
         
         const generateScientificProblem = () => {
              const exponent = Math.floor(Math.random() * 20) - 10;
              const mantissa = parseFloat((Math.random() * 9 + 1).toPrecision(3));
-             const value = mantissa * Math.pow(10, exponent);
-             gameState.problem = { type: 'scientific', value, correctMantissa: mantissa, correctExponent: exponent };
+             const scientificValue = mantissa * Math.pow(10, exponent);
+             gameState.problem = { type: 'scientific', value: scientificValue, correctMantissa: mantissa, correctExponent: exponent };
              buildScientificEquationUI();
         };
         
-        // --- UI BUILDERS ---
         const buildFactorEquationUI = () => {
             const { value, from, to, steps } = gameState.problem;
             const container = gameView.querySelector('#equation-container div');
-            
             let html = `<div class="font-bold text-gray-800 bg-white/70 p-3 rounded-lg border border-gray-200">${value} ${from}</div>`;
             steps.forEach((step, i) => {
-                html += `
-                    <div class="text-gray-800">&times;</div>
-                    <div class="flex flex-col items-center">
-                        <div class="flex items-center gap-2 border-b-2 border-gray-300 pb-2">
-                            <input type="number" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-theme">
-                            <span class="text-theme font-semibold w-12 text-left">${step.numUnit}</span>
-                        </div>
-                        <div class="flex items-center gap-2 pt-2">
-                            <input type="number" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-theme">
-                            <span class="text-theme font-semibold w-12 text-left">${step.denUnit}</span>
-                        </div>
-                    </div>`;
+                html += `<div class="text-gray-800">&times;</div><div class="flex flex-col items-center"><div class="flex items-center gap-2 border-b-2 border-gray-300 pb-2"><input type="text" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="text-red-600 font-semibold w-12 text-left">${step.numUnit}</span></div><div class="flex items-center gap-2 pt-2"><input type="text" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="text-red-600 font-semibold w-12 text-left">${step.denUnit}</span></div></div>`;
             });
-            html += `
-                <div class="text-gray-800">=</div>
-                <div class="flex items-center gap-2">
-                    <input type="number" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-theme">
-                    <span class="text-theme font-semibold">${to}</span>
-                </div>`;
+            html += `<div class="text-gray-800">=</div><div class="flex items-center gap-2"><input type="text" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="text-red-600 font-semibold">${to}</span></div>`;
             container.innerHTML = html;
             gameView.querySelector('#problem-title').textContent = 'Convierte la siguiente cantidad:';
             gameView.querySelector('#problem-statement').textContent = `${value} ${from} a ${to}`;
@@ -459,56 +349,52 @@
         const buildScientificEquationUI = () => {
              const { value } = gameState.problem;
              const container = gameView.querySelector('#equation-container div');
-             container.innerHTML = `
-                <div class="flex items-baseline gap-1 text-2xl">
-                    <input type="number" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-theme">
-                    <span class="font-semibold text-gray-800">&times; 10</span>
-                    <input type="number" id="sci-exponent" class="w-20 text-center rounded-md p-1 text-base self-start relative top-1 focus:ring-theme">
-                </div>`;
+             container.innerHTML = `<div class="flex items-baseline gap-1 text-2xl"><input type="text" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="font-semibold text-gray-800">&times; 10</span><input type="text" id="sci-exponent" class="w-20 text-center rounded-md p-1 text-base self-start relative top-1"></div>`;
             gameView.querySelector('#problem-title').textContent = 'Expresa el siguiente número:';
             gameView.querySelector('#problem-statement').textContent = value.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
             gameView.querySelector('#equation-title').textContent = 'Escribe la respuesta en notación científica:';
         };
 
-        // --- CHECKING LOGIC ---
         const checkAnswer = () => {
             const { problem } = gameState;
-            const tolerance = 0.05; // 5% tolerance for floating point
+            const tolerance = 0.05;
             const errorMessages = new Set();
             let isCorrect = false;
 
             if (problem.type === 'factor') {
                 let allStepsCorrect = true;
                 problem.steps.forEach((step, i) => {
-                    const userNum = parseFloat(gameView.querySelector(`[data-step="${i}"][data-type="num"]`).value);
-                    const userDen = parseFloat(gameView.querySelector(`[data-step="${i}"][data-type="den"]`).value);
-                    if (isNaN(userNum) || Math.abs(userNum - step.num) > tolerance || isNaN(userDen) || Math.abs(userDen - step.den) > tolerance) {
-                        allStepsCorrect = false;
-                        errorMessages.add(`El factor de conversión en el <b>paso ${i + 1}</b> es incorrecto.`);
+                    const userNumStr = gameView.querySelector(`[data-step="${i}"][data-type="num"]`).value;
+                    const userDenStr = gameView.querySelector(`[data-step="${i}"][data-type="den"]`).value;
+                    const userNum = parseFloatWithComma(userNumStr);
+                    const userDen = parseFloatWithComma(userDenStr);
+                    if (isNaN(userNum) || isNaN(userDen) || userDen === 0) {
+                        allStepsCorrect = false; errorMessages.add(`El factor de conversión en el <b>paso ${i + 1}</b> es inválido.`); return;
+                    }
+                    const correctRatio = step.num / step.den;
+                    const userRatio = userNum / userDen;
+                    const relativeError = correctRatio !== 0 ? Math.abs(userRatio - correctRatio) / correctRatio : Math.abs(userRatio);
+                    if (relativeError > tolerance) {
+                        allStepsCorrect = false; errorMessages.add(`El factor de conversión en el <b>paso ${i + 1}</b> es incorrecto.`);
                     }
                 });
-
-                const userAnswer = parseFloat(gameView.querySelector('#final-answer').value);
+                const userAnswerStr = gameView.querySelector('#final-answer').value;
+                const userAnswer = parseFloatWithComma(userAnswerStr);
                 const isAnsCorrect = !isNaN(userAnswer) && (Math.abs(userAnswer - problem.correctAnswer) / (problem.correctAnswer || 1) < tolerance || Math.abs(userAnswer - problem.correctAnswer) < 0.01);
                 if (!isAnsCorrect) errorMessages.add('El <b>resultado final</b> es incorrecto.');
-                
                 isCorrect = allStepsCorrect && isAnsCorrect;
-
             } else if (problem.type === 'scientific') {
-                const userMantissa = parseFloat(gameView.querySelector('#sci-mantissa').value);
-                const userExponent = parseFloat(gameView.querySelector('#sci-exponent').value);
+                const userMantissa = parseFloatWithComma(gameView.querySelector('#sci-mantissa').value);
+                const userExponent = parseFloatWithComma(gameView.querySelector('#sci-exponent').value);
                 const isMantissaOK = !isNaN(userMantissa) && Math.abs(userMantissa - problem.correctMantissa) < tolerance;
                 const isExponentOK = !isNaN(userExponent) && userExponent === problem.correctExponent;
                 if (!isMantissaOK) errorMessages.add('La <b>mantisa</b> (el número) es incorrecta.');
                 if (!isExponentOK) errorMessages.add('El <b>exponente</b> es incorrecto.');
-                
                 isCorrect = isMantissaOK && isExponentOK;
             }
-            
             gameState.current++;
             if(isCorrect) gameState.score++;
             showFeedback(isCorrect, Array.from(errorMessages));
-
             if (gameState.current >= gameState.total) {
                 const stats = getStats();
                 stats.correct += gameState.score;
@@ -522,9 +408,10 @@
         
         const showFeedback = (isCorrect, errors) => {
             const container = gameView.querySelector('#feedback-container');
+            const checkBtn = gameView.querySelector('#check-btn');
+            const nextBtn = gameView.querySelector('#next-btn');
             container.classList.remove('hidden');
             let explanationHTML = '';
-
             if (gameState.problem.type === 'factor') {
                 explanationHTML = `${gameState.problem.value} ${gameState.problem.from}`;
                 gameState.problem.steps.forEach(s => { explanationHTML += ` &times; ( ${s.num.toLocaleString()} ${s.numUnit} / ${s.den.toLocaleString()} ${s.denUnit} )`});
@@ -533,22 +420,9 @@
                 const displayValue = gameState.problem.value.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
                 explanationHTML = `${displayValue} = ${gameState.problem.correctMantissa} &times; 10<sup>${gameState.problem.correctExponent}</sup>`;
             }
-
-            container.innerHTML = `
-                <div class="flex items-start gap-4">
-                    <div class="mt-1">${isCorrect ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`}</div>
-                    <div>
-                        <h3 class="text-lg font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? '¡Excelente!' : '¡Casi lo tienes!'}</h3>
-                        <p class="text-gray-700 mt-1">${isCorrect ? 'Has completado el proceso correctamente.' : errors.join('<br>')}</p>
-                    </div>
-                </div>
-                <div class="mt-4 p-4 bg-gray-100/70 border border-gray-200 rounded-lg">
-                    <h4 class="font-semibold text-theme mb-2">Planteamiento Correcto:</h4>
-                    <p class="text-sm text-gray-600 font-mono break-words">${explanationHTML}</p>
-                </div>`;
-            
-            gameView.querySelector('#check-btn').classList.add('hidden');
-            if(gameState.current < gameState.total) gameView.querySelector('#next-btn').classList.remove('hidden');
+            container.innerHTML = `<div class="flex items-start gap-4"><div class="mt-1">${isCorrect ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`}</div><div><h3 class="text-lg font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? '¡Excelente!' : '¡Casi lo tienes!'}</h3><p class="text-gray-700 mt-1">${isCorrect ? 'Has completado el proceso correctamente.' : errors.join('<br>')}</p></div></div><div class="mt-4 p-4 bg-gray-100/70 border border-gray-200 rounded-lg"><h4 class="font-semibold text-red-600 mb-2">Planteamiento Correcto:</h4><p class="text-sm text-gray-600 font-mono break-words">${explanationHTML}</p></div>`;
+            checkBtn.classList.add('hidden');
+            if(gameState.current < gameState.total) nextBtn.classList.remove('hidden');
             gameView.querySelectorAll('input').forEach(i => i.disabled = true);
         };
         
@@ -558,9 +432,7 @@
             gameView.querySelector('#score-display').textContent = `Pregunta: ${gameState.current + 1} / ${gameState.total} | Aciertos: ${gameState.score}`;
         };
 
-        // --- INITIALIZATION ---
         document.getElementById('play-again-btn').addEventListener('click', () => { 
-            applyThemeColors(); // Reset to default
             updateStatsDisplay(); 
             showView(mainMenu); 
         });
