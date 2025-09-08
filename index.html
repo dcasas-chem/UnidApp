@@ -12,10 +12,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --theme-color-600: #dc2626; /* red-600 */
+            --theme-color-800: #991b1b; /* red-800 */
+            --theme-gradient-from: #ef4444; /* red-500 */
+            --theme-gradient-to: #f97316; /* orange-500 */
+            --theme-shadow-color: rgba(239, 68, 68, 0.5); /* red-500 shadow */
+            --theme-focus-ring-color: #ef4444; /* red-500 */
+            --theme-bg-from: #fca5a5; /* red-300 */
+            --theme-bg-to: #fdba74; /* orange-300 */
+        }
         body {
             font-family: 'Lexend', sans-serif;
-            background: linear-gradient(135deg, #a8e0ff 0%, #8ee2f5 50%, #91d8f7 100%);
+            background: linear-gradient(135deg, var(--theme-bg-from, #fca5a5), var(--theme-bg-to, #fdba74));
             color: #2d3748;
+            transition: background 0.5s ease;
         }
         .glass-container {
             background: rgba(255, 255, 255, 0.6);
@@ -27,7 +38,7 @@
         .theme-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             color: white;
-            border-radius: 1rem; /* rounded-xl */
+            border-radius: 1rem;
         }
         .theme-card:hover {
             transform: translateY(-8px);
@@ -49,13 +60,21 @@
             -webkit-appearance: none; margin: 0;
         }
         .btn-primary {
-            background: linear-gradient(45deg, #ef4444, #f97316); /* Red-500 to Orange-500 */
+            background: linear-gradient(45deg, var(--theme-gradient-from), var(--theme-gradient-to));
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5); /* Red-500 shadow */
+            box-shadow: 0 6px 20px var(--theme-shadow-color);
+        }
+        /* Dynamic Theme Classes */
+        .text-theme { color: var(--theme-color-600); }
+        .hover\:text-theme-dark:hover { color: var(--theme-color-800); }
+        .focus\:ring-theme:focus { 
+            --tw-ring-opacity: 1;
+            --tw-ring-color: var(--theme-focus-ring-color);
+            box-shadow: 0 0 0 2px var(--theme-focus-ring-color);
         }
     </style>
 </head>
@@ -80,9 +99,9 @@
                         <h3 class="text-lg font-bold mb-1">Magnitudes Simples</h3>
                         <p class="text-sky-100 text-sm">Longitud, masa, tiempo, volumen...</p>
                     </button>
-                    <button data-theme="derived" class="theme-card text-left p-5 bg-gradient-to-br from-red-500 to-rose-500">
+                    <button data-theme="derived" class="theme-card text-left p-5 bg-gradient-to-br from-purple-500 to-indigo-500">
                         <h3 class="text-lg font-bold mb-1">Magnitudes Derivadas</h3>
-                        <p class="text-red-100 text-sm">Velocidad, densidad...</p>
+                        <p class="text-purple-100 text-sm">Velocidad, densidad...</p>
                     </button>
                     <button data-theme="prefix" class="theme-card text-left p-5 bg-gradient-to-br from-emerald-500 to-lime-500">
                         <h3 class="text-lg font-bold mb-1">Múltiplos y Submúltiplos</h3>
@@ -105,7 +124,7 @@
         </div>
         
         <div id="game-over-view" class="hidden fade-in text-center p-8">
-            <h2 class="text-3xl font-bold text-red-600 mb-4">¡Partida Terminada!</h2>
+            <h2 id="game-over-title" class="text-3xl font-bold text-theme mb-4">¡Partida Terminada!</h2>
             <p id="final-score-text" class="text-xl text-gray-700 mb-8"></p>
             <button id="play-again-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Jugar de Nuevo</button>
         </div>
@@ -137,6 +156,67 @@
         for (const magKey in data.simple) {
             data.simple[magKey].path.forEach(unitKey => simpleUnitToMagnitude[unitKey] = magKey);
         }
+
+        const themes = {
+            default: {
+                '--theme-color-600': '#dc2626',
+                '--theme-color-800': '#991b1b',
+                '--theme-gradient-from': '#ef4444',
+                '--theme-gradient-to': '#f97316',
+                '--theme-shadow-color': 'rgba(239, 68, 68, 0.5)',
+                '--theme-focus-ring-color': '#ef4444',
+                '--theme-bg-from': '#fca5a5',
+                '--theme-bg-to': '#fdba74'
+            },
+            simple: {
+                '--theme-color-600': '#0284c7', // sky-600
+                '--theme-color-800': '#0369a1', // sky-800
+                '--theme-gradient-from': '#0ea5e9', // sky-500
+                '--theme-gradient-to': '#06b6d4', // cyan-500
+                '--theme-shadow-color': 'rgba(14, 165, 233, 0.5)',
+                '--theme-focus-ring-color': '#0ea5e9',
+                '--theme-bg-from': '#bae6fd',
+                '--theme-bg-to': '#a5f3fc'
+            },
+            derived: {
+                '--theme-color-600': '#7c3aed', // purple-600
+                '--theme-color-800': '#5b21b6', // purple-800
+                '--theme-gradient-from': '#8b5cf6', // purple-500
+                '--theme-gradient-to': '#6366f1', // indigo-500
+                '--theme-shadow-color': 'rgba(139, 92, 246, 0.5)',
+                '--theme-focus-ring-color': '#8b5cf6',
+                '--theme-bg-from': '#e9d5ff',
+                '--theme-bg-to': '#c7d2fe'
+            },
+            prefix: {
+                '--theme-color-600': '#16a34a', // green-600
+                '--theme-color-800': '#14532d', // green-900
+                '--theme-gradient-from': '#22c55e', // green-500
+                '--theme-gradient-to': '#84cc16', // lime-500
+                '--theme-shadow-color': 'rgba(34, 197, 94, 0.5)',
+                '--theme-focus-ring-color': '#22c55e',
+                '--theme-bg-from': '#a7f3d0',
+                '--theme-bg-to': '#d9f99d'
+            },
+            scientific: {
+                '--theme-color-600': '#f97316', // orange-500
+                '--theme-color-800': '#c2410c', // orange-700
+                '--theme-gradient-from': '#f59e0b', // amber-500
+                '--theme-gradient-to': '#f97316', // orange-500
+                '--theme-shadow-color': 'rgba(245, 158, 11, 0.5)',
+                '--theme-focus-ring-color': '#f59e0b',
+                '--theme-bg-from': '#fde68a',
+                '--theme-bg-to': '#fed7aa'
+            }
+        };
+
+        const applyThemeColors = (theme = 'default') => {
+            const colors = themes[theme];
+            const root = document.documentElement;
+            for (const [key, value] of Object.entries(colors)) {
+                root.style.setProperty(key, value);
+            }
+        };
 
         // --- DOM ELEMENTS ---
         const mainMenu = document.getElementById('main-menu');
@@ -182,18 +262,22 @@
             const themeBtn = e.target.closest('button[data-theme]');
             if (!themeBtn) return;
             currentTheme = themeBtn.dataset.theme;
+            applyThemeColors(currentTheme);
             questionSelectionView.innerHTML = `
-                <h2 class="text-2xl font-bold text-red-600 mb-6">¿Cuántas preguntas?</h2>
+                <h2 class="text-2xl font-bold text-theme mb-6">¿Cuántas preguntas?</h2>
                 <div class="flex justify-center flex-wrap gap-4 mt-6">
                     <button data-count="10" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">10</button>
                     <button data-count="15" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">15</button>
                     <button data-count="20" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">20</button>
                 </div>
-                <button id="back-to-themes-btn" class="text-red-600 hover:text-red-800 mt-8 flex items-center gap-1.5 mx-auto">
+                <button id="back-to-themes-btn" class="text-theme hover:text-theme-dark mt-8 flex items-center gap-1.5 mx-auto">
                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                     Volver
                 </button>`;
-            document.getElementById('back-to-themes-btn').addEventListener('click', () => showView(mainMenu));
+            document.getElementById('back-to-themes-btn').addEventListener('click', () => {
+                applyThemeColors(); // Reset to default
+                showView(mainMenu);
+            });
             showView(questionSelectionView);
         });
 
@@ -203,18 +287,18 @@
             gameState = { current: 0, score: 0, total: parseInt(countBtn.dataset.count), problem: {} };
             gameView.innerHTML = `
                 <div class="flex items-center justify-between mb-2 text-sm">
-                    <button id="back-btn" class="text-red-600 hover:text-red-800 flex items-center gap-1.5">
+                    <button id="back-btn" class="text-theme hover:text-theme-dark flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                         Salir
                     </button>
                      <div id="score-display" class="font-semibold text-gray-700"></div>
                 </div>
                 <div id="progress-container" class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                    <div id="progress-bar" class="bg-red-500 h-2 rounded-full transition-all duration-300 ease-linear"></div>
+                    <div id="progress-bar" class="bg-yellow-400 h-2 rounded-full transition-all duration-300 ease-linear"></div>
                 </div>
                 <div class="bg-white/50 p-5 rounded-lg text-center border border-gray-200">
                     <p class="text-gray-600 mb-2" id="problem-title"></p>
-                    <p id="problem-statement" class="text-xl md:text-2xl font-bold text-red-600 tracking-wider break-all"></p>
+                    <p id="problem-statement" class="text-xl md:text-2xl font-bold text-theme tracking-wider break-all"></p>
                 </div>
                 <div class="mt-5">
                     <p class="text-center text-gray-600 mb-4" id="equation-title"></p>
@@ -229,7 +313,10 @@
                 <div class="text-center">
                      <button id="next-btn" class="hidden mt-5 btn-primary px-8 py-3 text-white font-semibold rounded-lg">Siguiente Pregunta →</button>
                 </div>`;
-            document.getElementById('back-btn').addEventListener('click', () => showView(mainMenu));
+            document.getElementById('back-btn').addEventListener('click', () => {
+                applyThemeColors(); // Reset to default
+                showView(mainMenu);
+            });
             document.getElementById('check-btn').addEventListener('click', checkAnswer);
             document.getElementById('next-btn').addEventListener('click', generateProblem);
             showView(gameView);
@@ -348,20 +435,20 @@
                     <div class="text-gray-800">&times;</div>
                     <div class="flex flex-col items-center">
                         <div class="flex items-center gap-2 border-b-2 border-gray-300 pb-2">
-                            <input type="number" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
-                            <span class="text-red-600 font-semibold w-12 text-left">${step.numUnit}</span>
+                            <input type="number" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-theme">
+                            <span class="text-theme font-semibold w-12 text-left">${step.numUnit}</span>
                         </div>
                         <div class="flex items-center gap-2 pt-2">
-                            <input type="number" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
-                            <span class="text-red-600 font-semibold w-12 text-left">${step.denUnit}</span>
+                            <input type="number" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-theme">
+                            <span class="text-theme font-semibold w-12 text-left">${step.denUnit}</span>
                         </div>
                     </div>`;
             });
             html += `
                 <div class="text-gray-800">=</div>
                 <div class="flex items-center gap-2">
-                    <input type="number" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
-                    <span class="text-red-600 font-semibold">${to}</span>
+                    <input type="number" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-theme">
+                    <span class="text-theme font-semibold">${to}</span>
                 </div>`;
             container.innerHTML = html;
             gameView.querySelector('#problem-title').textContent = 'Convierte la siguiente cantidad:';
@@ -374,9 +461,9 @@
              const container = gameView.querySelector('#equation-container div');
              container.innerHTML = `
                 <div class="flex items-baseline gap-1 text-2xl">
-                    <input type="number" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                    <input type="number" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-theme">
                     <span class="font-semibold text-gray-800">&times; 10</span>
-                    <input type="number" id="sci-exponent" class="w-20 text-center rounded-md p-1 text-base self-start relative top-1">
+                    <input type="number" id="sci-exponent" class="w-20 text-center rounded-md p-1 text-base self-start relative top-1 focus:ring-theme">
                 </div>`;
             gameView.querySelector('#problem-title').textContent = 'Expresa el siguiente número:';
             gameView.querySelector('#problem-statement').textContent = value.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
@@ -456,7 +543,7 @@
                     </div>
                 </div>
                 <div class="mt-4 p-4 bg-gray-100/70 border border-gray-200 rounded-lg">
-                    <h4 class="font-semibold text-red-600 mb-2">Planteamiento Correcto:</h4>
+                    <h4 class="font-semibold text-theme mb-2">Planteamiento Correcto:</h4>
                     <p class="text-sm text-gray-600 font-mono break-words">${explanationHTML}</p>
                 </div>`;
             
@@ -472,7 +559,11 @@
         };
 
         // --- INITIALIZATION ---
-        document.getElementById('play-again-btn').addEventListener('click', () => { updateStatsDisplay(); showView(mainMenu); });
+        document.getElementById('play-again-btn').addEventListener('click', () => { 
+            applyThemeColors(); // Reset to default
+            updateStatsDisplay(); 
+            showView(mainMenu); 
+        });
         updateStatsDisplay();
         showView(mainMenu);
     });
