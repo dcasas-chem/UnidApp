@@ -14,24 +14,24 @@
     <style>
         body {
             font-family: 'Lexend', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #e1e7f0);
+            background: linear-gradient(135deg, #a8e0ff 0%, #8ee2f5 50%, #91d8f7 100%);
             color: #2d3748;
         }
         .glass-container {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
         }
         .theme-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-             border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: white;
+            border-radius: 1rem; /* rounded-xl */
         }
         .theme-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 10px 40px rgba(88, 101, 242, 0.2);
-            border-color: rgba(128, 138, 255, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -49,13 +49,13 @@
             -webkit-appearance: none; margin: 0;
         }
         .btn-primary {
-            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            background: linear-gradient(45deg, #ef4444, #f97316); /* Red-500 to Orange-500 */
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5); /* Red-500 shadow */
         }
     </style>
 </head>
@@ -65,7 +65,7 @@
         
         <div id="main-menu">
             <div class="text-center mb-6">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 tracking-tight">UnidApp</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500 tracking-tight">UnidApp</h1>
                 <p class="text-gray-600 mt-2">Domina los factores de conversión del Sistema Internacional.</p>
             </div>
 
@@ -74,23 +74,23 @@
             </div>
 
             <div id="theme-selection" class="fade-in">
-                <h2 class="text-lg font-semibold text-center text-indigo-600 mb-6">Elige una categoría para comenzar</h2>
+                <h2 class="text-lg font-semibold text-center text-red-600 mb-6">Elige una categoría para comenzar</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <button data-theme="simple" class="theme-card text-left p-5 bg-white/60 rounded-xl">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Magnitudes Simples</h3>
-                        <p class="text-gray-600 text-sm">Longitud, masa y tiempo. ¡Ideal para empezar!</p>
+                    <button data-theme="simple" class="theme-card text-left p-5 bg-gradient-to-br from-sky-500 to-cyan-400">
+                        <h3 class="text-lg font-bold mb-1">Magnitudes Simples</h3>
+                        <p class="text-sky-100 text-sm">Longitud, masa, tiempo, volumen...</p>
                     </button>
-                    <button data-theme="derived" class="theme-card text-left p-5 bg-white/60 rounded-xl">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Magnitudes Derivadas</h3>
-                        <p class="text-gray-600 text-sm">Velocidad, área... ¡Unidades compuestas!</p>
+                    <button data-theme="derived" class="theme-card text-left p-5 bg-gradient-to-br from-red-500 to-rose-500">
+                        <h3 class="text-lg font-bold mb-1">Magnitudes Derivadas</h3>
+                        <p class="text-red-100 text-sm">Velocidad, densidad...</p>
                     </button>
-                    <button data-theme="prefix" class="theme-card text-left p-5 bg-white/60 rounded-xl">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Múltiplos y Submúltiplos</h3>
-                        <p class="text-gray-600 text-sm">Practica con prefijos: de Giga a nano.</p>
+                    <button data-theme="prefix" class="theme-card text-left p-5 bg-gradient-to-br from-emerald-500 to-lime-500">
+                        <h3 class="text-lg font-bold mb-1">Múltiplos y Submúltiplos</h3>
+                        <p class="text-emerald-100 text-sm">Practica con prefijos: de Giga a nano.</p>
                     </button>
-                    <button data-theme="scientific" class="theme-card text-left p-5 bg-white/60 rounded-xl">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Notación Científica</h3>
-                        <p class="text-gray-600 text-sm">El reto definitivo con números muy grandes o pequeños.</p>
+                    <button data-theme="scientific" class="theme-card text-left p-5 bg-gradient-to-br from-amber-500 to-orange-500">
+                        <h3 class="text-lg font-bold mb-1">Notación Científica</h3>
+                        <p class="text-amber-100 text-sm">El reto definitivo.</p>
                     </button>
                 </div>
             </div>
@@ -105,7 +105,7 @@
         </div>
         
         <div id="game-over-view" class="hidden fade-in text-center p-8">
-            <h2 class="text-3xl font-bold text-indigo-600 mb-4">¡Partida Terminada!</h2>
+            <h2 class="text-3xl font-bold text-red-600 mb-4">¡Partida Terminada!</h2>
             <p id="final-score-text" class="text-xl text-gray-700 mb-8"></p>
             <button id="play-again-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Jugar de Nuevo</button>
         </div>
@@ -119,14 +119,17 @@
             simple: {
                 longitud: { name: 'Longitud', path: ['km', 'm', 'cm', 'mm'], units: { 'km': { to_next: 1000 }, 'm': { to_next: 100 }, 'cm': { to_next: 10 }, 'mm': {} } },
                 masa: { name: 'Masa', path: ['t', 'kg', 'g', 'mg'], units: { 't': { to_next: 1000 }, 'kg': { to_next: 1000 }, 'g': { to_next: 1000 }, 'mg': {} } },
-                tiempo: { name: 'Tiempo', path: ['d', 'h', 'min', 's'], units: { 'd': { to_next: 24 }, 'h': { to_next: 60 }, 'min': { to_next: 60 }, 's': {} } }
+                tiempo: { name: 'Tiempo', path: ['d', 'h', 'min', 's'], units: { 'd': { to_next: 24 }, 'h': { to_next: 60 }, 'min': { to_next: 60 }, 's': {} } },
+                volumen_liquido: { name: 'Volumen Líquido', path: ['kL', 'L', 'mL'], units: { 'kL': { to_next: 1000 }, 'L': { to_next: 1000 }, 'mL': {} } },
+                area: { name: 'Área', path: ['km²', 'm²', 'cm²'], units: { 'km²': { to_next: 1e6 }, 'm²': { to_next: 1e4 }, 'cm²': {} } },
+                volumen_cubico: { name: 'Volumen Cúbico', path: ['m³', 'cm³', 'mm³'], units: { 'm³': { to_next: 1e6 }, 'cm³': { to_next: 1000 }, 'mm³': {} } }
             },
             derived: {
                 velocidad: { name: 'Velocidad', units: { 'km/h': { num: 'km', den: 'h' }, 'm/s': { num: 'm', den: 's' } } },
-                area: { name: 'Área', units: { 'km²': { base: 'km' }, 'm²': { base: 'm' }, 'cm²': { base: 'cm' } } }
+                densidad: { name: 'Densidad', units: { 'kg/m³': { num: 'kg', den: 'm³' }, 'g/cm³': { num: 'g', den: 'cm³' } } }
             },
             prefix: {
-                name: 'Múltiplos y Submúltiplos', base_units: ['m', 'g', 's', 'L', 'W'],
+                name: 'Múltiplos y Submúltiplos', base_units: ['m', 'g', 's', 'L', 'W', 'V', 'A', 'Hz', 'J'],
                 prefixes: { 'G': 1e9, 'M': 1e6, 'k': 1e3, '': 1, 'c': 1e-2, 'm': 1e-3, 'µ': 1e-6, 'n': 1e-9 }
             }
         };
@@ -180,13 +183,13 @@
             if (!themeBtn) return;
             currentTheme = themeBtn.dataset.theme;
             questionSelectionView.innerHTML = `
-                <h2 class="text-2xl font-bold text-indigo-600 mb-6">¿Cuántas preguntas?</h2>
+                <h2 class="text-2xl font-bold text-red-600 mb-6">¿Cuántas preguntas?</h2>
                 <div class="flex justify-center flex-wrap gap-4 mt-6">
                     <button data-count="10" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">10</button>
                     <button data-count="15" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">15</button>
                     <button data-count="20" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">20</button>
                 </div>
-                <button id="back-to-themes-btn" class="text-indigo-600 hover:text-indigo-800 mt-8 flex items-center gap-1.5 mx-auto">
+                <button id="back-to-themes-btn" class="text-red-600 hover:text-red-800 mt-8 flex items-center gap-1.5 mx-auto">
                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                     Volver
                 </button>`;
@@ -200,18 +203,18 @@
             gameState = { current: 0, score: 0, total: parseInt(countBtn.dataset.count), problem: {} };
             gameView.innerHTML = `
                 <div class="flex items-center justify-between mb-2 text-sm">
-                    <button id="back-btn" class="text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5">
+                    <button id="back-btn" class="text-red-600 hover:text-red-800 flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                         Salir
                     </button>
                      <div id="score-display" class="font-semibold text-gray-700"></div>
                 </div>
                 <div id="progress-container" class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                    <div id="progress-bar" class="bg-indigo-500 h-2 rounded-full transition-all duration-300 ease-linear"></div>
+                    <div id="progress-bar" class="bg-red-500 h-2 rounded-full transition-all duration-300 ease-linear"></div>
                 </div>
                 <div class="bg-white/50 p-5 rounded-lg text-center border border-gray-200">
                     <p class="text-gray-600 mb-2" id="problem-title"></p>
-                    <p id="problem-statement" class="text-xl md:text-2xl font-bold text-indigo-600 tracking-wider"></p>
+                    <p id="problem-statement" class="text-xl md:text-2xl font-bold text-red-600 tracking-wider break-all"></p>
                 </div>
                 <div class="mt-5">
                     <p class="text-center text-gray-600 mb-4" id="equation-title"></p>
@@ -299,18 +302,13 @@
             if (Math.random() > 0.5) [fromKey, toKey] = [toKey, fromKey];
             
             const from = mag.units[fromKey], to = mag.units[toKey];
-            let steps = [], totalFactor = 1;
-
-            if (magKey === 'area') {
-                const conv = getConversionSteps(from.base, to.base);
-                steps.push(...conv.steps, ...conv.steps);
-                totalFactor = conv.factor * conv.factor;
-            } else { // velocity
-                const numConv = getConversionSteps(from.num, to.num);
-                const denConv = getConversionSteps(from.den, to.den);
-                steps.push(...numConv.steps, ...denConv.steps.map(s => ({...s, num: s.den, den: s.num, numUnit: s.denUnit, denUnit: s.numUnit})));
-                totalFactor = numConv.factor / denConv.factor;
-            }
+            const numConv = getConversionSteps(from.num, to.num);
+            const denConv = getConversionSteps(from.den, to.den);
+            const steps = [
+                ...numConv.steps, 
+                ...denConv.steps.map(s => ({...s, num: s.den, den: s.num, numUnit: s.denUnit, denUnit: s.numUnit}))
+            ];
+            const totalFactor = numConv.factor / denConv.factor;
             
             gameState.problem = { type: 'factor', value, from: fromKey, to: toKey, steps, correctAnswer: value * totalFactor };
             buildFactorEquationUI();
@@ -332,7 +330,7 @@
         };
         
         const generateScientificProblem = () => {
-             const exponent = Math.floor(Math.random() * 14) - 7;
+             const exponent = Math.floor(Math.random() * 20) - 10;
              const mantissa = parseFloat((Math.random() * 9 + 1).toPrecision(3));
              const value = mantissa * Math.pow(10, exponent);
              gameState.problem = { type: 'scientific', value, correctMantissa: mantissa, correctExponent: exponent };
@@ -350,20 +348,20 @@
                     <div class="text-gray-800">&times;</div>
                     <div class="flex flex-col items-center">
                         <div class="flex items-center gap-2 border-b-2 border-gray-300 pb-2">
-                            <input type="number" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-indigo-500">
-                            <span class="text-indigo-600 font-semibold w-12 text-left">${step.numUnit}</span>
+                            <input type="number" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                            <span class="text-red-600 font-semibold w-12 text-left">${step.numUnit}</span>
                         </div>
                         <div class="flex items-center gap-2 pt-2">
-                            <input type="number" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-indigo-500">
-                            <span class="text-indigo-600 font-semibold w-12 text-left">${step.denUnit}</span>
+                            <input type="number" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                            <span class="text-red-600 font-semibold w-12 text-left">${step.denUnit}</span>
                         </div>
                     </div>`;
             });
             html += `
                 <div class="text-gray-800">=</div>
                 <div class="flex items-center gap-2">
-                    <input type="number" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-indigo-500">
-                    <span class="text-indigo-600 font-semibold">${to}</span>
+                    <input type="number" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                    <span class="text-red-600 font-semibold">${to}</span>
                 </div>`;
             container.innerHTML = html;
             gameView.querySelector('#problem-title').textContent = 'Convierte la siguiente cantidad:';
@@ -376,7 +374,7 @@
              const container = gameView.querySelector('#equation-container div');
              container.innerHTML = `
                 <div class="flex items-baseline gap-1 text-2xl">
-                    <input type="number" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-indigo-500">
+                    <input type="number" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500">
                     <span class="font-semibold text-gray-800">&times; 10</span>
                     <input type="number" id="sci-exponent" class="w-20 text-center rounded-md p-1 text-base self-start relative top-1">
                 </div>`;
@@ -458,7 +456,7 @@
                     </div>
                 </div>
                 <div class="mt-4 p-4 bg-gray-100/70 border border-gray-200 rounded-lg">
-                    <h4 class="font-semibold text-indigo-600 mb-2">Planteamiento Correcto:</h4>
+                    <h4 class="font-semibold text-red-600 mb-2">Planteamiento Correcto:</h4>
                     <p class="text-sm text-gray-600 font-mono break-words">${explanationHTML}</p>
                 </div>`;
             
