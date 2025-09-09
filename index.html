@@ -13,17 +13,46 @@
     
     <style>
         :root {
-            --theme-color-600: #dc2626; /* red-600 */
-            --theme-color-800: #991b1b; /* red-800 */
-            --theme-gradient-from: #ef4444; /* red-500 */
-            --theme-gradient-to: #f97316; /* orange-500 */
-            --theme-shadow-color: rgba(239, 68, 68, 0.5); /* red-500 shadow */
-            --theme-focus-ring-color: #ef4444; /* red-500 */
+            --bg-gradient: linear-gradient(135deg, #fca5a5 0%, #fdba74 100%);
+            --color-primary-600: #dc2626; /* red-600 */
+            --color-primary-700: #b91c1c; /* red-700 */
+            --btn-gradient: linear-gradient(45deg, #ef4444, #f97316);
+            --btn-shadow: rgba(239, 68, 68, 0.5);
         }
+        /* THEME: Magnitudes Simples */
+        body.theme-simple {
+            --bg-gradient: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%);
+            --color-primary-600: #0369a1; --color-primary-700: #075985;
+            --btn-gradient: linear-gradient(45deg, #38bdf8, #0ea5e9);
+            --btn-shadow: rgba(56, 189, 248, 0.5);
+        }
+        /* THEME: Magnitudes Derivadas */
+        body.theme-derived {
+            --bg-gradient: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
+            --color-primary-600: #7c3aed; --color-primary-700: #6d28d9;
+            --btn-gradient: linear-gradient(45deg, #a855f7, #8b5cf6);
+            --btn-shadow: rgba(168, 85, 247, 0.5);
+        }
+        /* THEME: Múltiplos y Submúltiplos */
+        body.theme-prefix {
+            --bg-gradient: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+            --color-primary-600: #16a34a; --color-primary-700: #15803d;
+            --btn-gradient: linear-gradient(45deg, #4ade80, #22c55e);
+            --btn-shadow: rgba(74, 222, 128, 0.5);
+        }
+        /* THEME: Notación Científica */
+        body.theme-scientific {
+            --bg-gradient: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+            --color-primary-600: #d97706; --color-primary-700: #b45309;
+            --btn-gradient: linear-gradient(45deg, #fbbf24, #f59e0b);
+            --btn-shadow: rgba(251, 191, 36, 0.5);
+        }
+
         body {
             font-family: 'Lexend', sans-serif;
-            background: linear-gradient(135deg, #fca5a5 0%, #fdba74 100%); /* Red-300 to Orange-300 */
+            background: var(--bg-gradient);
             color: #2d3748;
+            transition: background 0.5s ease-in-out;
         }
         .glass-container {
             background: rgba(255, 255, 255, 0.6);
@@ -34,8 +63,7 @@
         }
         .theme-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            color: white;
-            border-radius: 1rem; /* rounded-xl */
+            color: white; border-radius: 1rem;
         }
         .theme-card:hover {
             transform: translateY(-8px);
@@ -46,33 +74,37 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .fade-in { animation: fadeIn 0.6s ease-out forwards; }
-        input[type="number"], input[type="text"] {
-            -moz-appearance: textfield;
-            background-color: #f8fafc;
-            border: 1px solid #cbd5e1;
-            color: #1e293b;
+        .fc-input {
+            -moz-appearance: textfield; background-color: #f8fafc;
+            border: 1px solid #cbd5e1; color: #1e293b;
+            text-align: center; border-radius: 0.375rem;
+            padding: 0.5rem; width: 6rem;
         }
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none; margin: 0;
-        }
+        .fc-input::-webkit-inner-spin-button, .fc-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         .btn-primary {
-            background: linear-gradient(45deg, var(--theme-gradient-from), var(--theme-gradient-to));
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background: var(--btn-gradient);
+            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--theme-shadow-color);
+            box-shadow: 0 6px 20px var(--btn-shadow);
         }
-        /* Dynamic Theme Classes */
-        .text-theme { color: var(--theme-color-600); }
-        .hover\:text-theme-dark:hover { color: var(--theme-color-800); }
-        .focus\:ring-theme:focus { 
-            --tw-ring-opacity: 1;
-            --tw-ring-color: var(--theme-focus-ring-color);
-            box-shadow: 0 0 0 2px var(--theme-focus-ring-color);
+        .level-radio-label {
+            border: 2px solid #cbd5e1; transition: all 0.2s ease-in-out;
         }
+        .level-radio:checked + .level-radio-label {
+            border-color: var(--color-primary-600); background-color: rgba(255,255,255,0.5);
+            color: var(--color-primary-700); transform: scale(1.05);
+        }
+        .sci-notation-container {
+            display: flex; align-items: flex-start; gap: 0.25rem;
+        }
+        .sci-exponent-input {
+            width: 4rem; padding: 0.1rem 0.25rem; font-size: 0.75rem;
+            margin-top: -0.2rem; margin-left: -0.25rem;
+        }
+        .text-theme-600 { color: var(--color-primary-600); }
+        .text-theme-700 { color: var(--color-primary-700); }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -84,21 +116,17 @@
                 <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500 tracking-tight">UnidApp</h1>
                 <p class="text-gray-600 mt-2">Domina los factores de conversión del Sistema Internacional.</p>
             </div>
-
-            <div id="stats-container" class="text-center mb-6 p-4 bg-white/50 rounded-lg border border-gray-200">
-                <!-- Stats loaded by JS -->
-            </div>
-
+            <div id="stats-container" class="text-center mb-6 p-4 bg-white/50 rounded-lg border border-gray-200"></div>
             <div id="theme-selection" class="fade-in">
-                <h2 class="text-lg font-semibold text-center text-red-600 mb-6">Elige una categoría para comenzar</h2>
+                <h2 class="text-lg font-semibold text-center text-theme-600 mb-6">Elige una categoría para comenzar</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <button data-theme="simple" class="theme-card text-left p-5 bg-gradient-to-br from-sky-500 to-cyan-400">
                         <h3 class="text-lg font-bold mb-1">Magnitudes Simples</h3>
-                        <p class="text-sky-100 text-sm">Longitud, masa, tiempo, volumen...</p>
+                        <p class="text-sky-100 text-sm">Longitud, masa, tiempo, temperatura...</p>
                     </button>
                     <button data-theme="derived" class="theme-card text-left p-5 bg-gradient-to-br from-purple-500 to-indigo-500">
                         <h3 class="text-lg font-bold mb-1">Magnitudes Derivadas</h3>
-                        <p class="text-purple-100 text-sm">Velocidad, densidad...</p>
+                        <p class="text-purple-100 text-sm">Área, volumen, velocidad, densidad...</p>
                     </button>
                     <button data-theme="prefix" class="theme-card text-left p-5 bg-gradient-to-br from-emerald-500 to-lime-500">
                         <h3 class="text-lg font-bold mb-1">Múltiplos y Submúltiplos</h3>
@@ -106,336 +134,417 @@
                     </button>
                     <button data-theme="scientific" class="theme-card text-left p-5 bg-gradient-to-br from-amber-500 to-orange-500">
                         <h3 class="text-lg font-bold mb-1">Notación Científica</h3>
-                        <p class="text-amber-100 text-sm">El reto definitivo.</p>
+                        <p class="text-amber-100 text-sm">Conversiones y formato SI.</p>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="question-selection" class="hidden fade-in text-center">
-            <!-- Content generated by JS -->
+        <div id="settings-view" class="hidden fade-in text-center">
+            <h2 id="settings-title" class="text-2xl font-bold text-theme-600 mb-6"></h2>
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">1. Elige el Nivel</h3>
+                <div id="level-selection" class="grid grid-cols-2 gap-4 max-w-sm mx-auto"></div>
+            </div>
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">2. Elige el número de preguntas</h3>
+                <div id="question-count-selection" class="flex justify-center flex-wrap gap-4">
+                    <button data-count="10" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">10</button>
+                    <button data-count="15" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">15</button>
+                    <button data-count="20" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">20</button>
+                </div>
+            </div>
+            <button id="back-to-themes-btn" class="text-theme-600 hover:opacity-75 mt-4 flex items-center gap-1.5 mx-auto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Volver</button>
         </div>
 
-        <div id="game-view" class="hidden">
-            <!-- Content generated by JS -->
-        </div>
+        <div id="game-view" class="hidden"></div>
         
         <div id="game-over-view" class="hidden fade-in text-center p-8">
-            <h2 id="game-over-title" class="text-3xl font-bold text-red-600 mb-4">¡Partida Terminada!</h2>
+            <h2 id="game-over-title" class="text-3xl font-bold text-theme-600 mb-4">¡Partida Terminada!</h2>
             <p id="final-score-text" class="text-xl text-gray-700 mb-8"></p>
             <button id="play-again-btn" class="btn-primary text-white font-bold py-3 px-10 rounded-lg text-lg">Jugar de Nuevo</button>
         </div>
-
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- DATA ---
-        const data = {
+        const DATA = {
             simple: {
-                longitud: { name: 'Longitud', path: ['km', 'm', 'cm', 'mm'], units: { 'km': { to_next: 1000 }, 'm': { to_next: 100 }, 'cm': { to_next: 10 }, 'mm': {} } },
-                masa: { name: 'Masa', path: ['t', 'kg', 'g', 'mg'], units: { 't': { to_next: 1000 }, 'kg': { to_next: 1000 }, 'g': { to_next: 1000 }, 'mg': {} } },
-                tiempo: { name: 'Tiempo', path: ['d', 'h', 'min', 's'], units: { 'd': { to_next: 24 }, 'h': { to_next: 60 }, 'min': { to_next: 60 }, 's': {} } },
-                volumen_liquido: { name: 'Volumen Líquido', path: ['kL', 'L', 'mL'], units: { 'kL': { to_next: 1000 }, 'L': { to_next: 1000 }, 'mL': {} } },
-                area: { name: 'Área', path: ['km²', 'm²', 'cm²'], units: { 'km²': { to_next: 1e6 }, 'm²': { to_next: 1e4 }, 'cm²': {} } },
-                volumen_cubico: { name: 'Volumen Cúbico', path: ['m³', 'cm³', 'mm³'], units: { 'm³': { to_next: 1e6 }, 'cm³': { to_next: 1000 }, 'mm³': {} } }
+                name: 'Magnitudes Simples', 
+                levels: { 1: 'Varios pasos (varios factores)', 2: 'Paso directo (1 factor)' },
+                magnitudes: {
+                    longitud: { name: 'Longitud', path: ['km', 'm', 'cm', 'mm'], units: { 'km': 1000, 'm': 100, 'cm': 10 } },
+                    masa: { name: 'Masa', path: ['t', 'kg', 'g', 'mg'], units: { 't': 1000, 'kg': 1000, 'g': 1000 } },
+                    tiempo: { name: 'Tiempo', path: ['h', 'min', 's'], units: { 'h': 60, 'min': 60 } },
+                    temperatura: { name: 'Temperatura', path: ['°C', 'K'], units: {} },
+                    moles: { name: 'Cantidad de Sustancia', path: ['kmol', 'mol', 'mmol'], units: { 'kmol': 1000, 'mol': 1000 } },
+                    amperios: { name: 'Intensidad de Corriente', path: ['kA', 'A', 'mA'], units: { 'kA': 1000, 'A': 1000 } }
+                }
             },
             derived: {
-                velocidad: { name: 'Velocidad', units: { 'km/h': { num: 'km', den: 'h' }, 'm/s': { num: 'm', den: 's' } } },
-                densidad: { name: 'Densidad', units: { 'kg/m³': { num: 'kg', den: 'm³' }, 'g/cm³': { num: 'g', den: 'cm³' } } }
+                name: 'Magnitudes Derivadas', levels: { 1: 'Área y Volumen', 2: 'Densidad, velocidad, etc.' },
+                magnitudes: {
+                    area: { name: 'Área', path: ['km²', 'm²', 'cm²'], units: { 'km²': 1e6, 'm²': 1e4 } },
+                    volumen: { name: 'Volumen', path: ['m³', 'dm³', 'cm³'], units: { 'm³': 1000, 'dm³': 1000 } },
+                    velocidad: { name: 'Velocidad', from: 'km/h', to: 'm/s', factors: [{num: 1000, num_unit: 'm', den: 1, den_unit: 'km'}, {num: 1, num_unit: 'h', den: 3600, den_unit: 's'}] },
+                    densidad: { name: 'Densidad', from: 'g/cm³', to: 'kg/m³', factors: [{num: 1, num_unit: 'kg', den: 1000, den_unit: 'g'}, {num: 1000000, num_unit: 'cm³', den: 1, den_unit: 'm³'}] },
+                    aceleracion: { name: 'Aceleración', from: 'km/h²', to: 'm/s²', factors: [{num: 1000, num_unit: 'm', den: 1, den_unit: 'km'}, {num: 1, num_unit: 'h²', den: 12960000, den_unit: 's²'}] },
+                    fuerza: { name: 'Fuerza', from: 'g·cm/s²', to: 'kg·m/s²', factors: [{num: 1, num_unit: 'kg', den: 1000, den_unit: 'g'}, {num: 1, num_unit: 'm', den: 100, den_unit: 'cm'}] }
+                }
             },
             prefix: {
-                name: 'Múltiplos y Submúltiplos',
-                base_units: ['m', 'g', 's', 'L', 'W', 'V', 'A', 'Hz', 'J'],
-                path: ['G', 'M', 'k', '', 'c', 'm', 'µ', 'n'],
-                units: {
-                    'G': { to_next: 1000 }, 'M': { to_next: 1000 }, 'k': { to_next: 1000 },
-                    '': { to_next: 100 }, 'c': { to_next: 10 }, 'm': { to_next: 1000 },
-                    'µ': { to_next: 1000 }, 'n': {}
-                }
+                name: 'Múltiplos y Submúltiplos', 
+                levels: { 1: 'Paso intermedio (2 factores)', 2: 'Cambio directo (1 factor)' },
+                base_units: ['m', 'g', 's', 'L', 'A'], path: ['G', 'M', 'k', '', 'c', 'm', 'µ', 'n'],
+                units: { 'G': 1e9, 'M': 1e6, 'k': 1e3, '': 1, 'c': 1e-2, 'm': 1e-3, 'µ': 1e-6, 'n': 1e-9 }
+            },
+            scientific: {
+                name: 'Notación Científica', 
+                levels: { 1: 'Escribir un número en N.C. y viceversa', 2: 'Hacer una conversión y dar el resultado en N.C.' }
             }
         };
-        const simpleUnitToMagnitude = {};
-        for (const magKey in data.simple) {
-            data.simple[magKey].path.forEach(unitKey => simpleUnitToMagnitude[unitKey] = magKey);
-        }
 
-        // --- DOM ELEMENTS ---
-        const mainMenu = document.getElementById('main-menu');
-        const questionSelectionView = document.getElementById('question-selection');
-        const gameView = document.getElementById('game-view');
-        const gameOverView = document.getElementById('game-over-view');
-        const allViews = [mainMenu, questionSelectionView, gameView, gameOverView];
+        const mainMenu = document.getElementById('main-menu'), settingsView = document.getElementById('settings-view'), gameView = document.getElementById('game-view'), gameOverView = document.getElementById('game-over-view');
+        const allViews = [mainMenu, settingsView, gameView, gameOverView];
+        const bodyEl = document.body;
         
-        // --- STATE & GAME LOGIC ---
-        let gameState = {};
-        let currentTheme = '';
+        let gameState = {}, currentTheme = '';
 
-        const parseFloatWithComma = (str) => {
-            if (typeof str !== 'string') return parseFloat(str);
-            return parseFloat(str.replace(',', '.'));
-        };
-
-        const showView = (viewToShow) => {
-            allViews.forEach(v => v.classList.add('hidden'));
-            viewToShow.classList.remove('hidden');
-        };
-
+        const parseFloatWithComma = str => typeof str === 'string' ? parseFloat(str.replace(',', '.')) : parseFloat(str);
+        const showView = view => { allViews.forEach(v => v.classList.add('hidden')); view.classList.remove('hidden'); };
         const getStats = () => JSON.parse(localStorage.getItem('conversionStats')) || { correct: 0, total: 0 };
-        const saveStats = (stats) => localStorage.setItem('conversionStats', JSON.stringify(stats));
+        const saveStats = stats => localStorage.setItem('conversionStats', JSON.stringify(stats));
+        const setTheme = theme => {
+            bodyEl.className = bodyEl.className.replace(/theme-\w+/g, '');
+            if(theme) bodyEl.classList.add(`theme-${theme}`);
+        };
+        
         const updateStatsDisplay = () => {
             const stats = getStats();
             const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
-            const statsContainer = document.getElementById('stats-container');
-            statsContainer.innerHTML = `<div class="flex items-center justify-center gap-4"><div><h3 class="font-bold text-gray-800">Estadísticas Globales</h3><p class="text-sm text-gray-700">Aciertos: <span class="font-semibold text-green-600">${stats.correct}</span> de <span class="font-semibold text-blue-600">${stats.total}</span> | Precisión: <span class="font-semibold text-yellow-600">${accuracy}%</span></p></div><button id="reset-stats-btn" class="p-2 rounded-full hover:bg-red-500/10" title="Borrar datos"><svg class="w-5 h-5 text-gray-500 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div>`;
-            document.getElementById('reset-stats-btn').addEventListener('click', () => {
-                if (confirm('¿Estás seguro de que quieres borrar todas tus estadísticas?')) {
-                    localStorage.removeItem('conversionStats');
-                    updateStatsDisplay();
-                }
-            });
+            document.getElementById('stats-container').innerHTML = `<div class="flex items-center justify-center gap-4"><div><h3 class="font-bold text-gray-800">Estadísticas Globales</h3><p class="text-sm text-gray-700">Aciertos: <span class="font-semibold text-green-600">${stats.correct}</span> de <span class="font-semibold text-blue-600">${stats.total}</span> | Precisión: <span class="font-semibold text-yellow-600">${accuracy}%</span></p></div><button id="reset-stats-btn" class="p-2 rounded-full hover:bg-red-500/10" title="Borrar datos"><svg class="w-5 h-5 text-gray-500 hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div>`;
+            document.getElementById('reset-stats-btn').addEventListener('click', () => { if (confirm('¿Estás seguro?')) { localStorage.removeItem('conversionStats'); updateStatsDisplay(); } });
         };
         
-        document.getElementById('theme-selection').addEventListener('click', (e) => {
-            const themeBtn = e.target.closest('button[data-theme]');
-            if (!themeBtn) return;
-            currentTheme = themeBtn.dataset.theme;
-            questionSelectionView.innerHTML = `<h2 class="text-2xl font-bold text-red-600 mb-6">¿Cuántas preguntas?</h2><div class="flex justify-center flex-wrap gap-4 mt-6"><button data-count="10" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">10</button><button data-count="15" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">15</button><button data-count="20" class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg">20</button></div><button id="back-to-themes-btn" class="text-red-600 hover:text-red-800 mt-8 flex items-center gap-1.5 mx-auto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Volver</button>`;
-            document.getElementById('back-to-themes-btn').addEventListener('click', () => showView(mainMenu));
-            showView(questionSelectionView);
+        document.getElementById('theme-selection').addEventListener('click', e => {
+            const themeBtn = e.target.closest('button[data-theme]'); if (!themeBtn) return;
+            currentTheme = themeBtn.dataset.theme; 
+            setTheme(currentTheme);
+            const themeData = DATA[currentTheme];
+            document.getElementById('settings-title').textContent = `Configurar: ${themeData.name}`;
+            const levelContainer = document.getElementById('level-selection'); levelContainer.innerHTML = '';
+            Object.entries(themeData.levels).forEach(([level, desc], i) => {
+                levelContainer.innerHTML += `<div><input type="radio" name="level" value="${level}" id="level-${level}" class="sr-only level-radio" ${i === 0 ? 'checked' : ''}><label for="level-${level}" class="level-radio-label block p-4 rounded-lg cursor-pointer"><span class="font-bold block">Nivel ${level}</span><span class="text-sm text-gray-600">${desc}</span></label></div>`;
+            });
+            showView(settingsView);
         });
+        
+        const goBackToMenu = () => { setTheme(null); showView(mainMenu); };
+        document.getElementById('back-to-themes-btn').addEventListener('click', goBackToMenu);
+        document.getElementById('play-again-btn').addEventListener('click', () => { updateStatsDisplay(); goBackToMenu(); });
 
-        questionSelectionView.addEventListener('click', (e) => {
-            const countBtn = e.target.closest('button[data-count]');
-            if (!countBtn) return;
-            gameState = { current: 0, score: 0, total: parseInt(countBtn.dataset.count), problem: {} };
-            gameView.innerHTML = `<div class="flex items-center justify-between mb-2 text-sm"><button id="back-btn" class="text-red-600 hover:text-red-800 flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Salir</button><div id="score-display" class="font-semibold text-gray-700"></div></div><div id="progress-container" class="w-full bg-gray-200 rounded-full h-2 mb-4"><div id="progress-bar" class="bg-yellow-400 h-2 rounded-full transition-all duration-300 ease-linear"></div></div><div class="bg-white/50 p-5 rounded-lg text-center border border-gray-200"><p class="text-gray-600 mb-2" id="problem-title"></p><p id="problem-statement" class="text-xl md:text-2xl font-bold text-red-600 tracking-wider break-all"></p></div><div class="mt-5"><p class="text-center text-gray-600 mb-4" id="equation-title"></p><div id="equation-container" class="overflow-x-auto pb-4"><div class="flex items-center justify-center flex-wrap gap-2 md:gap-4 text-lg md:text-xl min-w-max px-2"></div></div></div><div class="mt-6 flex justify-center"><button id="check-btn" class="btn-primary px-8 py-3 text-white font-semibold rounded-lg">Comprobar</button></div><div id="feedback-container" class="hidden mt-5 p-4 rounded-lg fade-in"></div><div class="text-center"><button id="next-btn" class="hidden mt-5 btn-primary px-8 py-3 text-white font-semibold rounded-lg">Siguiente Pregunta →</button></div>`;
-            document.getElementById('back-btn').addEventListener('click', () => showView(mainMenu));
+        settingsView.addEventListener('click', e => {
+            const countBtn = e.target.closest('button[data-count]'); if (!countBtn) return;
+            const currentLevel = parseInt(settingsView.querySelector('input[name="level"]:checked').value);
+            gameState = { current: 0, score: 0, total: parseInt(countBtn.dataset.count), problem: {}, level: currentLevel };
+            gameView.innerHTML = `<div class="flex items-center justify-between mb-2 text-sm"><button id="back-btn" class="text-theme-600 hover:opacity-75 flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Salir</button><div id="score-display" class="font-semibold text-gray-700"></div></div><div class="w-full bg-gray-200 rounded-full h-2 mb-4"><div id="progress-bar" class="bg-yellow-400 h-2 rounded-full transition-all"></div></div><div id="problem-container"></div><div class="mt-6 flex justify-center"><button id="check-btn" class="btn-primary px-8 py-3 text-white font-semibold rounded-lg">Comprobar</button></div><div id="feedback-container" class="hidden mt-5"></div><div class="text-center"><button id="next-btn" class="hidden mt-5 btn-primary px-8 py-3 text-white font-semibold rounded-lg">Siguiente →</button></div>`;
+            document.getElementById('back-btn').addEventListener('click', goBackToMenu);
             document.getElementById('check-btn').addEventListener('click', checkAnswer);
             document.getElementById('next-btn').addEventListener('click', generateProblem);
             showView(gameView);
             generateProblem();
         });
 
-        const generateProblem = () => {
-            const feedbackContainer = gameView.querySelector('#feedback-container');
-            const checkBtn = gameView.querySelector('#check-btn');
-            const nextBtn = gameView.querySelector('#next-btn');
-            feedbackContainer.classList.add('hidden');
-            checkBtn.classList.remove('hidden');
-            nextBtn.classList.add('hidden');
-            gameView.querySelector('#equation-container div').innerHTML = '';
-            const value = parseFloat((Math.random() * 200 + 1).toPrecision(3));
-            if (currentTheme === 'simple') generateSimpleProblem(value);
-            else if (currentTheme === 'derived') generateDerivedProblem(value);
-            else if (currentTheme === 'prefix') generatePrefixProblem(value);
-            else if (currentTheme === 'scientific') generateScientificProblem();
-            updateProgress();
-        };
+        const getRandomElement = arr => arr[Math.floor(Math.random() * arr.length)];
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-        const getConversionSteps = (fromUnit, toUnit) => {
-             const magKey = simpleUnitToMagnitude[fromUnit];
-             if(!magKey) return { steps: [], factor: 1};
-             const mag = data.simple[magKey];
-             const fromIdx = mag.path.indexOf(fromUnit);
-             const toIdx = mag.path.indexOf(toUnit);
-             if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return { steps: [], factor: 1 };
-             const steps = []; let totalFactor = 1;
-             const forward = fromIdx < toIdx;
-             const path = forward ? mag.path.slice(fromIdx, toIdx) : mag.path.slice(toIdx, fromIdx).reverse();
-             path.forEach(u => {
-                 const stepFrom = forward ? u : mag.path[mag.path.indexOf(u) + 1];
-                 const stepTo = forward ? mag.path[mag.path.indexOf(u) + 1] : u;
-                 const factor = mag.units[stepFrom].to_next;
-                 if (forward) {
-                     steps.push({ num: factor, den: 1, numUnit: stepTo, denUnit: stepFrom });
-                     totalFactor *= factor;
-                 } else {
-                     steps.push({ num: 1, den: factor, numUnit: stepTo, denUnit: stepFrom });
-                     totalFactor /= factor;
-                 }
-             });
-             return { steps, factor: totalFactor };
-        };
-        
-        const generateSimpleProblem = (value) => {
-            const magKeys = Object.keys(data.simple);
-            const mag = data.simple[magKeys[Math.floor(Math.random() * magKeys.length)]];
-            let from, to;
-            do { from = mag.path[Math.floor(Math.random() * mag.path.length)]; to = mag.path[Math.floor(Math.random() * mag.path.length)]; } while (from === to);
-            const { steps, factor } = getConversionSteps(from, to);
-            gameState.problem = { type: 'factor', value, from, to, steps, correctAnswer: value * factor };
-            buildFactorEquationUI();
-        };
-        
-        const generateDerivedProblem = (value) => {
-            const magKeys = Object.keys(data.derived);
-            const magKey = magKeys[Math.floor(Math.random() * magKeys.length)];
-            const mag = data.derived[magKey];
-            const unitKeys = Object.keys(mag.units);
-            let fromKey = unitKeys[0], toKey = unitKeys[1];
-            if (Math.random() > 0.5) [fromKey, toKey] = [toKey, fromKey];
-            const from = mag.units[fromKey], to = mag.units[toKey];
-            const numConv = getConversionSteps(from.num, to.num);
-            const denConv = getConversionSteps(from.den, to.den);
-            const steps = [ ...numConv.steps, ...denConv.steps.map(s => ({...s, num: s.den, den: s.num, numUnit: s.denUnit, denUnit: s.numUnit})) ];
-            const totalFactor = numConv.factor / denConv.factor;
-            gameState.problem = { type: 'factor', value, from: fromKey, to: toKey, steps, correctAnswer: value * totalFactor };
-            buildFactorEquationUI();
-        };
-
-        const generatePrefixProblem = (value) => {
-            const baseUnit = data.prefix.base_units[Math.floor(Math.random() * data.prefix.base_units.length)];
-            const magnitude = data.prefix;
-            let fromIndex, toIndex;
-            const pathLength = magnitude.path.length;
-            fromIndex = Math.floor(Math.random() * pathLength);
-            if (Math.random() > 0.5) { // 50% chance for a complex problem
-                do { toIndex = Math.floor(Math.random() * pathLength); } while (fromIndex === toIndex);
-            } else { // 50% chance for a simpler problem (1 or 2 steps away)
-                const step = Math.random() > 0.5 ? 1 : 2;
-                const direction = Math.random() > 0.5 ? 1 : -1;
-                toIndex = fromIndex + (step * direction);
-                if (toIndex < 0 || toIndex >= pathLength) toIndex = fromIndex - (step * direction);
-                if (toIndex < 0 || toIndex >= pathLength || fromIndex === toIndex) toIndex = fromIndex > 0 ? fromIndex - 1 : fromIndex + 1;
-            }
-            const fromPrefix = magnitude.path[fromIndex];
-            const toPrefix = magnitude.path[toIndex];
-            const steps = []; let totalFactor = 1;
-            const forward = fromIndex < toIndex;
-            const pathSlice = forward ? magnitude.path.slice(fromIndex, toIndex) : magnitude.path.slice(toIndex, fromIndex).reverse();
-            pathSlice.forEach((prefixKey) => {
-                const stepFromPrefix = forward ? prefixKey : magnitude.path[magnitude.path.indexOf(prefixKey) + 1];
-                const stepToPrefix = forward ? magnitude.path[magnitude.path.indexOf(prefixKey) + 1] : prefixKey;
-                const factor = magnitude.units[stepFromPrefix].to_next;
-                const stepFromUnit = stepFromPrefix + baseUnit;
-                const stepToUnit = stepToPrefix + baseUnit;
-                if (forward) {
-                    steps.push({ num: factor, den: 1, numUnit: stepToUnit, denUnit: stepFromUnit });
-                    totalFactor *= factor;
-                } else {
-                    steps.push({ num: 1, den: factor, numUnit: stepToUnit, denUnit: stepFromUnit });
-                    totalFactor /= factor;
-                }
-            });
-            const fromUnit = fromPrefix + baseUnit;
-            const toUnit = toPrefix + baseUnit;
-            gameState.problem = { type: 'factor', value, from: fromUnit, to: toUnit, steps, correctAnswer: value * totalFactor };
-            buildFactorEquationUI();
-        };
-        
-        const generateScientificProblem = () => {
-             const exponent = Math.floor(Math.random() * 20) - 10;
-             const mantissa = parseFloat((Math.random() * 9 + 1).toPrecision(3));
-             const scientificValue = mantissa * Math.pow(10, exponent);
-             gameState.problem = { type: 'scientific', value: scientificValue, correctMantissa: mantissa, correctExponent: exponent };
-             buildScientificEquationUI();
-        };
-        
-        const buildFactorEquationUI = () => {
-            const { value, from, to, steps } = gameState.problem;
-            const container = gameView.querySelector('#equation-container div');
-            let html = `<div class="font-bold text-gray-800 bg-white/70 p-3 rounded-lg border border-gray-200">${value} ${from}</div>`;
-            steps.forEach((step, i) => {
-                html += `<div class="text-gray-800">&times;</div><div class="flex flex-col items-center"><div class="flex items-center gap-2 border-b-2 border-gray-300 pb-2"><input type="text" data-step="${i}" data-type="num" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="text-red-600 font-semibold w-12 text-left">${step.numUnit}</span></div><div class="flex items-center gap-2 pt-2"><input type="text" data-step="${i}" data-type="den" class="w-20 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="text-red-600 font-semibold w-12 text-left">${step.denUnit}</span></div></div>`;
-            });
-            html += `<div class="text-gray-800">=</div><div class="flex items-center gap-2"><input type="text" id="final-answer" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="text-red-600 font-semibold">${to}</span></div>`;
-            container.innerHTML = html;
-            gameView.querySelector('#problem-title').textContent = 'Convierte la siguiente cantidad:';
-            gameView.querySelector('#problem-statement').textContent = `${value} ${from} a ${to}`;
-            gameView.querySelector('#equation-title').textContent = 'Completa la cadena de factores de conversión:';
-        };
-        
-        const buildScientificEquationUI = () => {
-             const { value } = gameState.problem;
-             const container = gameView.querySelector('#equation-container div');
-             container.innerHTML = `<div class="flex items-baseline gap-1 text-2xl"><input type="text" id="sci-mantissa" class="w-32 text-center rounded-md p-2 focus:ring-2 focus:ring-red-500"><span class="font-semibold text-gray-800">&times; 10</span><input type="text" id="sci-exponent" class="w-20 text-center rounded-md p-1 text-base self-start relative top-1"></div>`;
-            gameView.querySelector('#problem-title').textContent = 'Expresa el siguiente número:';
-            gameView.querySelector('#problem-statement').textContent = value.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
-            gameView.querySelector('#equation-title').textContent = 'Escribe la respuesta en notación científica:';
-        };
-
-        const checkAnswer = () => {
-            const { problem } = gameState;
-            const tolerance = 0.05;
-            const errorMessages = new Set();
-            let isCorrect = false;
-
-            if (problem.type === 'factor') {
-                let allStepsCorrect = true;
-                problem.steps.forEach((step, i) => {
-                    const userNumStr = gameView.querySelector(`[data-step="${i}"][data-type="num"]`).value;
-                    const userDenStr = gameView.querySelector(`[data-step="${i}"][data-type="den"]`).value;
-                    const userNum = parseFloatWithComma(userNumStr);
-                    const userDen = parseFloatWithComma(userDenStr);
-                    if (isNaN(userNum) || isNaN(userDen) || userDen === 0) {
-                        allStepsCorrect = false; errorMessages.add(`El factor de conversión en el <b>paso ${i + 1}</b> es inválido.`); return;
-                    }
-                    const correctRatio = step.num / step.den;
-                    const userRatio = userNum / userDen;
-                    const relativeError = correctRatio !== 0 ? Math.abs(userRatio - correctRatio) / correctRatio : Math.abs(userRatio);
-                    if (relativeError > tolerance) {
-                        allStepsCorrect = false; errorMessages.add(`El factor de conversión en el <b>paso ${i + 1}</b> es incorrecto.`);
-                    }
-                });
-                const userAnswerStr = gameView.querySelector('#final-answer').value;
-                const userAnswer = parseFloatWithComma(userAnswerStr);
-                const isAnsCorrect = !isNaN(userAnswer) && (Math.abs(userAnswer - problem.correctAnswer) / (problem.correctAnswer || 1) < tolerance || Math.abs(userAnswer - problem.correctAnswer) < 0.01);
-                if (!isAnsCorrect) errorMessages.add('El <b>resultado final</b> es incorrecto.');
-                isCorrect = allStepsCorrect && isAnsCorrect;
-            } else if (problem.type === 'scientific') {
-                const userMantissa = parseFloatWithComma(gameView.querySelector('#sci-mantissa').value);
-                const userExponent = parseFloatWithComma(gameView.querySelector('#sci-exponent').value);
-                const isMantissaOK = !isNaN(userMantissa) && Math.abs(userMantissa - problem.correctMantissa) < tolerance;
-                const isExponentOK = !isNaN(userExponent) && userExponent === problem.correctExponent;
-                if (!isMantissaOK) errorMessages.add('La <b>mantisa</b> (el número) es incorrecta.');
-                if (!isExponentOK) errorMessages.add('El <b>exponente</b> es incorrecto.');
-                isCorrect = isMantissaOK && isExponentOK;
-            }
+        function generateProblem() {
+            if (gameState.current >= gameState.total) { endGame(); return; }
             gameState.current++;
-            if(isCorrect) gameState.score++;
-            showFeedback(isCorrect, Array.from(errorMessages));
-            if (gameState.current >= gameState.total) {
-                const stats = getStats();
-                stats.correct += gameState.score;
-                stats.total += gameState.total;
-                saveStats(stats);
-                updateStatsDisplay();
-                document.getElementById('final-score-text').textContent = `Tu puntuación fue: ${gameState.score} de ${gameState.total} aciertos.`;
-                showView(gameOverView);
+            const generators = { simple: generateSimpleProblem, derived: generateDerivedProblem, prefix: generatePrefixProblem, scientific: generateScientificProblem };
+            gameState.problem = generators[currentTheme](gameState.level);
+            updateUIForNewProblem();
+        }
+
+        function generateSimpleProblem(level) {
+            const mag = getRandomElement(Object.values(DATA.simple.magnitudes));
+            let fromIndex, toIndex;
+            if (level === 2) { // 1 paso (adyacente)
+                fromIndex = getRandomInt(0, mag.path.length - 2); toIndex = fromIndex + 1;
+            } else { // Varios pasos (no adyacente)
+                fromIndex = 0; toIndex = mag.path.length - 1;
             }
-        };
+            if (Math.random() > 0.5) [fromIndex, toIndex] = [toIndex, fromIndex];
+            
+            const initialValue = getRandomInt(1, 200), fromUnit = mag.path[fromIndex], toUnit = mag.path[toIndex];
+            
+            if (mag.name === 'Temperatura') {
+                const fromC = fromUnit === '°C';
+                return {
+                    title: mag.name, type: 'temperature', initialValue, fromUnit, toUnit,
+                    operation: fromC ? '+' : '-',
+                    operand: 273.15,
+                    answer: fromC ? initialValue + 273.15 : initialValue - 273.15
+                };
+            }
+
+            const steps = Math.abs(fromIndex - toIndex);
+            let factors = [];
+            let tempValue = initialValue;
+            const forward = fromIndex < toIndex;
+            for(let i = 0; i < steps; i++) {
+                const currentIdx = forward ? fromIndex + i : fromIndex - i;
+                const unit1 = mag.path[currentIdx], unit2 = mag.path[forward ? currentIdx + 1 : currentIdx - 1];
+                const factorVal = mag.units[forward ? unit1 : unit2];
+                factors.push({ num: forward ? factorVal : 1, num_unit: unit2, den: forward ? 1 : factorVal, den_unit: unit1 });
+                tempValue = forward ? tempValue * factorVal : tempValue / factorVal;
+            }
+            return { title: mag.name, initialValue, fromUnit, toUnit, factors, answer: tempValue };
+        }
+
+        function generateDerivedProblem(level) {
+            const mags = DATA.derived.magnitudes;
+            const magKey = getRandomElement(level === 1 ? ['area', 'volumen'] : Object.keys(mags).filter(k=>!['area','volumen'].includes(k)));
+            const mag = mags[magKey];
+            const initialValue = getRandomInt(1, 200);
+            let problem = { title: mag.name, initialValue };
+
+            if(mag.path) {
+                let from, to;
+                do { from = getRandomElement(mag.path); to = getRandomElement(mag.path); } while (from === to);
+                problem.fromUnit = from; problem.toUnit = to;
+                const fromIdx = mag.path.indexOf(from), toIdx = mag.path.indexOf(to);
+                let tempValue = initialValue; problem.factors = [];
+                const forward = fromIdx < toIdx;
+                for(let i = 0; i < Math.abs(fromIdx - toIdx); i++) {
+                    const currentIdx = forward ? fromIdx + i : fromIdx - i;
+                    const unit1 = mag.path[currentIdx], unit2 = mag.path[forward ? currentIdx + 1 : currentIdx - 1];
+                    const factorVal = mag.units[forward ? unit1 : unit2];
+                    problem.factors.push({num: forward ? factorVal : 1, num_unit: unit2, den: forward ? 1 : factorVal, den_unit: unit1});
+                    tempValue = forward ? tempValue * factorVal : tempValue / factorVal;
+                }
+                problem.answer = tempValue;
+            } else {
+                problem.fromUnit = mag.from; problem.toUnit = mag.to; problem.factors = mag.factors;
+                problem.answer = mag.factors.reduce((acc, f) => acc * (f.num / f.den), initialValue);
+            }
+            return problem;
+        }
         
-        const showFeedback = (isCorrect, errors) => {
-            const container = gameView.querySelector('#feedback-container');
-            const checkBtn = gameView.querySelector('#check-btn');
-            const nextBtn = gameView.querySelector('#next-btn');
-            container.classList.remove('hidden');
-            let explanationHTML = '';
-            if (gameState.problem.type === 'factor') {
-                explanationHTML = `${gameState.problem.value} ${gameState.problem.from}`;
-                gameState.problem.steps.forEach(s => { explanationHTML += ` &times; ( ${s.num.toLocaleString()} ${s.numUnit} / ${s.den.toLocaleString()} ${s.denUnit} )`});
-                explanationHTML += ` = ${gameState.problem.correctAnswer.toPrecision(4)} ${gameState.problem.to}`;
-            } else if (gameState.problem.type === 'scientific') {
-                const displayValue = gameState.problem.value.toLocaleString('en-US', {useGrouping: false, maximumFractionDigits: 20});
-                explanationHTML = `${displayValue} = ${gameState.problem.correctMantissa} &times; 10<sup>${gameState.problem.correctExponent}</sup>`;
+        function generatePrefixProblem(level) {
+            const { base_units, path, units } = DATA.prefix;
+            const baseUnit = getRandomElement(base_units);
+            let fromPrefix, toPrefix;
+            if (level === 2) { // Directo (1 factor)
+                 do { fromPrefix = getRandomElement(path); toPrefix = getRandomElement(path); } while (fromPrefix === toPrefix);
+            } else { // Intermedio (2 factores)
+                do { fromPrefix = getRandomElement(path.filter(p=>p!=='')); toPrefix = getRandomElement(path.filter(p=>p!=='')); } while (fromPrefix === toPrefix);
             }
-            container.innerHTML = `<div class="flex items-start gap-4"><div class="mt-1">${isCorrect ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`}</div><div><h3 class="text-lg font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? '¡Excelente!' : '¡Casi lo tienes!'}</h3><p class="text-gray-700 mt-1">${isCorrect ? 'Has completado el proceso correctamente.' : errors.join('<br>')}</p></div></div><div class="mt-4 p-4 bg-gray-100/70 border border-gray-200 rounded-lg"><h4 class="font-semibold text-red-600 mb-2">Planteamiento Correcto:</h4><p class="text-sm text-gray-600 font-mono break-words">${explanationHTML}</p></div>`;
-            checkBtn.classList.add('hidden');
-            if(gameState.current < gameState.total) nextBtn.classList.remove('hidden');
+            
+            const initialValue = getRandomInt(1, 500);
+            const factorFromBase = units[fromPrefix];
+            const factorToBase = units[toPrefix];
+            const correctValue = initialValue * (factorFromBase / factorToBase);
+            let factors = [];
+
+            if (level === 2) {
+                const factor = factorFromBase / factorToBase;
+                factors.push({ num: factor > 1 ? factor : 1, num_unit: toPrefix + baseUnit, den: factor < 1 ? 1/factor : 1, den_unit: fromPrefix + baseUnit });
+            } else {
+                factors.push({ num: factorFromBase, num_unit: baseUnit, den: 1, den_unit: fromPrefix + baseUnit });
+                factors.push({ num: 1, num_unit: toPrefix + baseUnit, den: factorToBase, den_unit: baseUnit });
+            }
+            
+            return { title: 'Múltiplos y Submúltiplos', initialValue, fromUnit: fromPrefix + baseUnit, toUnit: toPrefix + baseUnit, factors, answer: correctValue };
+        }
+
+        function generateScientificProblem(level) {
+            let problem = { title: 'Notación Científica', type: 'scientific' };
+            const num = (Math.random() * 1e5 * (Math.random() > 0.5 ? 1 : -1)) + (Math.random() * 1e-3);
+            const sci = num.toExponential(3).split('e');
+            
+            if (level === 1) {
+                if (Math.random() > 0.5) {
+                    problem.instruction = 'Escribe el siguiente número en notación científica:';
+                    problem.initialValue = parseFloat(num.toPrecision(4));
+                    problem.fromUnit = ''; problem.toUnit = 'N.C.';
+                    problem.answer = { mantissa: parseFloat(sci[0]), exponent: parseInt(sci[1]) };
+                } else {
+                    problem.instruction = 'Escribe el siguiente número en formato decimal:';
+                    problem.initialValue = `${sci[0]} x 10^${parseInt(sci[1])}`;
+                    problem.fromUnit = ''; problem.toUnit = 'decimal';
+                    problem.answer = { mantissa: parseFloat(num.toPrecision(4)) };
+                }
+            } else {
+                const prefixProblem = generatePrefixProblem(1);
+                problem.instruction = `Convierte y expresa el resultado en N.C.:`;
+                problem.initialValue = prefixProblem.initialValue;
+                problem.fromUnit = prefixProblem.fromUnit;
+                problem.toUnit = prefixProblem.toUnit;
+                const finalValueSci = prefixProblem.answer.toExponential(3).split('e');
+                problem.answer = { mantissa: parseFloat(finalValueSci[0]), exponent: parseInt(finalValueSci[1]), unit: prefixProblem.toUnit };
+            }
+            return problem;
+        }
+        
+        function updateUIForNewProblem() {
+            const { title, initialValue, fromUnit, toUnit, factors, type, instruction, operation } = gameState.problem;
+            updateProgress();
+            
+            const problemHTML = `<div class="bg-white/50 p-5 rounded-lg border text-center">
+                <p class="text-gray-600 mb-2 font-semibold">${title}</p>
+                <p id="question-instruction" class="text-xl font-bold text-theme-700 mb-6"></p>
+                <div id="problem-statement-container" class="flex items-center justify-center flex-wrap gap-2 text-xl"></div>
+            </div>`;
+            gameView.querySelector('#problem-container').innerHTML = problemHTML;
+
+            gameView.querySelector('#question-instruction').textContent = instruction || `Convierte ${initialValue} ${fromUnit} en ${toUnit}`;
+            const container = gameView.querySelector('#problem-statement-container');
+            let statementHTML = '';
+
+            if (type === 'temperature') {
+                statementHTML = `<div class="font-bold text-theme-600">${initialValue} ${fromUnit}</div>
+                <div class="text-2xl font-bold text-gray-600 mx-2">${operation}</div>
+                <input type="number" class="fc-input" data-role="temp-operand">
+                <div class="text-2xl font-bold text-gray-600 mx-2">=</div>
+                <div class="flex items-center gap-2">
+                    <input type="number" class="fc-input font-bold" data-role="result"> <span class="font-bold text-theme-600">${toUnit}</span>
+                </div>`;
+            } else if (type === 'scientific' && gameState.level === 1) {
+                statementHTML = `<div class="font-bold text-theme-600">${initialValue} ${fromUnit}</div>
+                <div class="text-2xl font-bold text-gray-600 mx-2">→</div>`;
+                if (gameState.problem.answer.exponent !== undefined) {
+                     statementHTML += `<div class="sci-notation-container">
+                        <input type="number" class="fc-input w-28" data-role="sci-mantissa">
+                        <span class="font-bold text-2xl">× 10</span>
+                        <input type="number" class="fc-input sci-exponent-input" data-role="sci-exponent">
+                     </div>`;
+                } else {
+                     statementHTML += `<input type="number" class="fc-input font-bold" data-role="sci-decimal">`;
+                }
+            } else if (type === 'scientific' && gameState.level === 2) {
+                 statementHTML = `<div class="font-bold text-theme-600">${initialValue} ${fromUnit}</div>
+                    <div class="text-2xl font-bold text-gray-600 mx-2">=</div>
+                    <div class="sci-notation-container">
+                        <input type="number" class="fc-input w-28" data-role="sci-mantissa">
+                        <span class="font-bold text-2xl">× 10</span>
+                        <input type="number" class="fc-input sci-exponent-input" data-role="sci-exponent">
+                        <input type="text" class="fc-input w-24" data-role="sci-unit">
+                    </div>`;
+            } else {
+                let factorsHTML = (factors || []).map((f, i) => `
+                    <div class="text-2xl font-bold text-gray-600 mx-2">×</div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex items-center gap-2"><input type="number" class="fc-input" data-role="factor-num" data-index="${i}"> <span class="font-semibold">${f.num_unit}</span></div>
+                        <div class="w-full border-t-2 border-gray-700 my-1"></div>
+                        <div class="flex items-center gap-2"><input type="number" class="fc-input" data-role="factor-den" data-index="${i}"> <span class="font-semibold">${f.den_unit}</span></div>
+                    </div>`).join('');
+                
+                const resultHTML = `<div class="flex items-center gap-2">
+                    <input type="number" class="fc-input font-bold" data-role="result"> <span class="font-bold text-theme-600">${toUnit}</span>
+                </div>`;
+
+                statementHTML = `<div class="font-bold text-theme-600">${initialValue} ${fromUnit}</div>
+                    ${factorsHTML}
+                    <div class="text-2xl font-bold text-gray-600 mx-2">=</div>
+                    ${resultHTML}`;
+            }
+            container.innerHTML = statementHTML;
+
+            document.getElementById('check-btn').classList.remove('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            const feedbackContainer = document.getElementById('feedback-container');
+            feedbackContainer.classList.add('hidden');
+            feedbackContainer.innerHTML = '';
+        }
+        
+        const updateProgress = () => {
+             gameView.querySelector('#progress-bar').style.width = `${(gameState.current - 1) / gameState.total * 100}%`;
+             gameView.querySelector('#score-display').textContent = `Pregunta: ${gameState.current}/${gameState.total} | Aciertos: ${gameState.score}`;
+        };
+
+        function checkAnswer() {
+            const inputs = Array.from(gameView.querySelectorAll('input'));
+            if (inputs.some(input => input.value.trim() === '')) {
+                showFeedback(false, ['Debes rellenar todas las casillas.']);
+                return;
+            }
+
+            const p = gameState.problem; let errors = [];
+            let isCorrect = true;
+
+            if (p.type === 'temperature') {
+                const operandInput = parseFloatWithComma(gameView.querySelector('[data-role="temp-operand"]').value);
+                if (operandInput !== p.operand) { isCorrect = false; errors.push('El valor de la conversión es incorrecto.');}
+            } else if (p.type === 'scientific') {
+                const ans = p.answer;
+                if(ans.exponent !== undefined) {
+                    const mantissaInput = parseFloatWithComma(gameView.querySelector('[data-role="sci-mantissa"]').value);
+                    const exponentInput = parseInt(gameView.querySelector('[data-role="sci-exponent"]').value);
+                    if(Math.abs(mantissaInput - ans.mantissa) > 0.01) {isCorrect = false; errors.push('La mantisa es incorrecta.');}
+                    if(exponentInput !== ans.exponent) {isCorrect = false; errors.push('El exponente es incorrecto.');}
+                    if(ans.unit) {
+                        const unitInput = gameView.querySelector('[data-role="sci-unit"]').value;
+                        if(unitInput.toLowerCase().replace(/ /g, '') !== ans.unit.toLowerCase().replace(/ /g, '')) {isCorrect = false; errors.push('La unidad final es incorrecta.');}
+                    }
+                } else {
+                    const decimalInput = parseFloatWithComma(gameView.querySelector('[data-role="sci-decimal"]').value);
+                    if(Math.abs(decimalInput - ans.mantissa) > 0.01) {isCorrect = false; errors.push('El número decimal es incorrecto.');}
+                }
+            }
+            
+            if (p.factors) {
+                 p.factors.forEach((factor, i) => {
+                    const numInput = parseFloatWithComma(gameView.querySelector(`[data-role="factor-num"][data-index="${i}"]`).value);
+                    const denInput = parseFloatWithComma(gameView.querySelector(`[data-role="factor-den"][data-index="${i}"]`).value);
+                    if(numInput !== factor.num) { isCorrect = false; errors.push(`El numerador del factor ${i+1} es incorrecto.`); }
+                    if(denInput !== factor.den) { isCorrect = false; errors.push(`El denominador del factor ${i+1} es incorrecto.`); }
+                });
+            }
+
+            const resultInput = gameView.querySelector(`[data-role="result"]`);
+            if(resultInput) {
+                const resultVal = parseFloatWithComma(resultInput.value);
+                const tolerance = Math.abs(p.answer * 0.01);
+                if (Math.abs(resultVal - p.answer) > Math.max(0.01, tolerance)) { isCorrect = false; errors.push('El resultado final es incorrecto.'); }
+            }
+            
+            const stats = getStats(); stats.total++;
+            if (isCorrect) { gameState.score++; stats.correct++; }
+            saveStats(stats);
+            showFeedback(isCorrect, errors);
+        }
+        
+        function showFeedback(isCorrect, errors) {
+            const feedbackContainer = document.getElementById('feedback-container');
+            const p = gameState.problem;
+            let explanationHTML = '';
+            if (p.type === 'temperature') {
+                explanationHTML = `${p.initialValue} ${p.fromUnit} ${p.operation} ${p.operand} = ${p.answer.toLocaleString('es-ES', { maximumFractionDigits: 4 })} ${p.toUnit}`;
+            } else if (p.type === 'scientific') {
+                explanationHTML = `${p.instruction}<br>`;
+                if(p.answer.exponent !== undefined) explanationHTML += `Respuesta: ${p.answer.mantissa} × 10<sup>${p.answer.exponent}</sup> ${p.answer.unit || ''}`;
+                else explanationHTML += `Respuesta: ${p.answer.mantissa}`;
+            } else {
+                explanationHTML = `${p.initialValue} ${p.fromUnit}`;
+                (p.factors || []).forEach(f => { explanationHTML += ` × (${f.num} ${f.num_unit} / ${f.den} ${f.den_unit})`; });
+                explanationHTML += ` = ${p.answer.toLocaleString('es-ES', { maximumFractionDigits: 4 })} ${p.toUnit}`;
+            }
+            
+            feedbackContainer.classList.remove('hidden');
+            feedbackContainer.innerHTML = `<div class="p-4 rounded-lg flex items-start gap-4 ${isCorrect ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300'}"><div class="flex-shrink-0 text-2xl">${isCorrect ? '✅' : '❌'}</div><div><h3 class="text-lg font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? '¡Excelente!' : '¡Casi lo tienes!'}</h3><p class="text-gray-700 mt-1">${isCorrect ? 'Has completado el proceso correctamente.' : errors.join('<br>')}</p></div></div><div class="mt-4 p-4 bg-gray-100/70 border rounded-lg"><h4 class="font-semibold text-theme-600 mb-2">Planteamiento Correcto:</h4><p class="text-sm text-gray-600 font-mono break-words">${explanationHTML}</p></div>`;
+            document.getElementById('check-btn').classList.add('hidden');
+            const nextButton = document.getElementById('next-btn');
+            nextButton.classList.remove('hidden');
+            nextButton.textContent = gameState.current < gameState.total ? 'Siguiente →' : 'Ver Puntuación Final';
             gameView.querySelectorAll('input').forEach(i => i.disabled = true);
         };
         
-        const updateProgress = () => {
-            const progress = (gameState.current / gameState.total) * 100;
-            gameView.querySelector('#progress-bar').style.width = `${progress}%`;
-            gameView.querySelector('#score-display').textContent = `Pregunta: ${gameState.current + 1} / ${gameState.total} | Aciertos: ${gameState.score}`;
-        };
+        function endGame() {
+            showView(gameOverView);
+            document.getElementById('final-score-text').textContent = `Tu puntuación fue: ${gameState.score} de ${gameState.total}.`;
+        }
 
-        document.getElementById('play-again-btn').addEventListener('click', () => { 
-            updateStatsDisplay(); 
-            showView(mainMenu); 
-        });
         updateStatsDisplay();
         showView(mainMenu);
     });
